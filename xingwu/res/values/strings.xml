@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">xingwu</string>
+    <string name="welcome">Welcome!</string>
+    <string name="scan_qrcode">扫描二维码</string>
+</resources>
