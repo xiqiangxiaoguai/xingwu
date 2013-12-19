@@ -140,6 +140,9 @@ public final class CameraManager {
   public synchronized void startPreview() {
     Camera theCamera = camera;
     if (theCamera != null && !previewing) {
+    	//jiangzhouq modified
+    	//add camera display orientation : 90
+    	theCamera.setDisplayOrientation(90);
       theCamera.startPreview();
       previewing = true;
       autoFocusManager = new AutoFocusManager(context, camera);
@@ -216,7 +219,10 @@ public final class CameraManager {
       int height = findDesiredDimensionInRange(screenResolution.y, MIN_FRAME_HEIGHT, MAX_FRAME_HEIGHT);
 
       int leftOffset = (screenResolution.x - width) / 2;
-      int topOffset = (screenResolution.y - height) / 2;
+      
+      //jiangzhouq modify
+      //modify the viewfinderview topoffset
+      int topOffset = (screenResolution.y - height) / 6;
       framingRect = new Rect(leftOffset, topOffset, leftOffset + width, topOffset + height);
       Log.d(TAG, "Calculated framing rect: " + framingRect);
     }

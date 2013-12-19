@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Window;
 
 public class DisplayActivity extends Activity {
 
@@ -11,6 +12,7 @@ public class DisplayActivity extends Activity {
 		public void handleMessage(android.os.Message msg) {
 			switch(msg.what){
 			case 0:
+				finish();
 				startActivity(new Intent(DisplayActivity.this, LoginServerActivity.class));
 				break;
 			}
@@ -20,6 +22,6 @@ public class DisplayActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_display);
-		mHandler.sendEmptyMessageDelayed(0, 2000);
+		mHandler.sendEmptyMessageDelayed(0, 1000);
 	}
 }

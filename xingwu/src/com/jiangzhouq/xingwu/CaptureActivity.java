@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,7 +14,6 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.TextView;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
@@ -35,7 +35,6 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 	private String characterSet;
 	private AmbientLightManager ambientLightManager;
 	private Map<DecodeHintType, ?> decodeHints;
-	private TextView txtResult;
 	public ViewfinderView getViewfinderView() {
 		return viewfinderView;
 	}
@@ -59,7 +58,6 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 		hasSurface = false;
 		beepManager = new BeepManager(this);
 		ambientLightManager = new AmbientLightManager(this);
-		txtResult = (TextView) findViewById(R.id.txtResult);
 	}
 
 	@Override
@@ -154,12 +152,14 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 	public void handleDecode(Result rawResult, Bitmap barcode, float scaleFactor) {
 		ResultHandler resultHandler = ResultHandlerFactory.makeResultHandler(
 				this, rawResult);
-
 		boolean fromLiveScan = barcode != null;
-		txtResult.setText(rawResult.getText());
 		if (fromLiveScan) {
 			beepManager.playBeepSoundAndVibrate();
 		}
+		Intent intent = new Intent();
+		intent.putExtra(Constants.BUNDLE_KEY_SN, rawResult.getText());
+		CaptureActivity.this.setResult(RESULT_OK, intent);
+		CaptureActivity.this.finish();
 	}
 
 	@Override

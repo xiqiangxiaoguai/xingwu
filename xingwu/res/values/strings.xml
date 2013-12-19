@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">xingwu</string>
-    <string name="welcome">Welcome!</string>
+    <string name="app_name">E家通</string>
+    <string name="welcome">您好!</string>
     <string name="scan_qrcode">扫描二维码</string>
+    <string name="login">登录</string>
+    <string name="ok">确认</string>
+    <string name="cancel">取消</string>
+    <string name="sn_editor_display">请输入序列号</string>
+    <string name="setting">设置</string>
+    <string name="setting_pw_title">本地密码管理</string>
+    <string name="setting_update_title">在线更新</string>
 </resources>

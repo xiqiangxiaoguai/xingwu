@@ -10,9 +10,28 @@
 
     <Button
         android:id="@+id/qrcode_enter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/qrcode_size"
+        android:layout_height="@dimen/qrcode_size"
         android:text="@string/scan_qrcode"
+        android:layout_above="@+id/sn_editor"
+        android:layout_centerHorizontal="true"
      />
-
+	<EditText 
+	    android:id="@+id/sn_editor"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:textSize="18sp"
+	    android:layout_marginLeft="10dp"
+	    android:layout_marginRight="10dp"
+	    android:layout_centerInParent="true"
+	    android:hint="@string/sn_editor_display"/>
+	<Button 
+	    android:id="@+id/login"
+	    android:layout_height="wrap_content"
+	    android:layout_width="match_parent"
+	    android:text="@string/ok"
+	    android:textSize="18sp"
+	    android:layout_marginLeft="10dp"
+	    android:layout_marginRight="10dp"
+	    android:layout_below="@+id/sn_editor"/>
 </RelativeLayout>

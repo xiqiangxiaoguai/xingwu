@@ -7,6 +7,8 @@
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="18" />
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
+	<uses-permission android:name="android.permission.INTERNET"></uses-permission>
 	<uses-permission android:name="android.permission.CAMERA"></uses-permission>
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
 	<uses-feature android:name="android.hardware.camera"/>
@@ -20,7 +22,8 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.jiangzhouq.xingwu.DisplayActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -28,9 +31,26 @@
         </activity>
         <activity
             android:name="com.jiangzhouq.xingwu.LoginServerActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name" 
+            android:theme="@android:style/Theme.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.LoginServerActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.jiangzhouq.xingwu.ConnectActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.ConnectActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.jiangzhouq.xingwu.SettingActivity"
+            android:label="@string/setting" >
+            <intent-filter>
+                <action android:name="android.intent.action.SettingActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -42,6 +62,11 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <meta-data android:value="YOUR_APP_KEY" android:name="52b33ffb56240b25710521e9"/>
+        <service
+		    android:name="com.umeng.common.net.DownloadingService"
+		    android:process=":DownloadingService" >
+		</service>
     </application>
 
 </manifest>
