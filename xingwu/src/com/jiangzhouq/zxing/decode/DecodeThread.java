@@ -20,6 +20,7 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.ResultPointCallback;
 import com.jiangzhouq.xingwu.CaptureActivity;
+import com.jiangzhouq.xingwu.Constants;
 
 import android.content.SharedPreferences;
 import android.os.Handler;
@@ -76,7 +77,7 @@ final class DecodeThread extends Thread {
       hints.put(DecodeHintType.CHARACTER_SET, characterSet);
     }
     hints.put(DecodeHintType.NEED_RESULT_POINT_CALLBACK, resultPointCallback);
-    Log.i("DecodeThread", "Hints: " + hints);
+    Log.d(Constants.LOG_TAG, "Hints: " + hints);
   }
 
   Handler getHandler() {

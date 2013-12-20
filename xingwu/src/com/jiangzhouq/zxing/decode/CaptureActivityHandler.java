@@ -25,6 +25,7 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.Result;
 import com.jiangzhouq.xingwu.CaptureActivity;
+import com.jiangzhouq.xingwu.Constants;
 import com.jiangzhouq.xingwu.R;
 import com.jiangzhouq.zxing.camera.CameraManager;
 
@@ -81,11 +82,11 @@ public final class CaptureActivityHandler extends Handler {
   public void handleMessage(Message message) {
     switch (message.what) {
       case R.id.restart_preview:
-        Log.d(TAG, "Got restart preview message");
+       Log.d(Constants.LOG_TAG, "Got restart preview message");
         restartPreviewAndDecode();
         break;
       case R.id.decode_succeeded:
-        Log.d(TAG, "Got decode succeeded message");
+       Log.d(Constants.LOG_TAG, "Got decode succeeded message");
         state = State.SUCCESS;
         Bundle bundle = message.getData();
         Bitmap barcode = null;
@@ -107,12 +108,12 @@ public final class CaptureActivityHandler extends Handler {
         cameraManager.requestPreviewFrame(decodeThread.getHandler(), R.id.decode);
         break;
       case R.id.return_scan_result:
-        Log.d(TAG, "Got return scan result message");
+       Log.d(Constants.LOG_TAG, "Got return scan result message");
         activity.setResult(Activity.RESULT_OK, (Intent) message.obj);
         activity.finish();
         break;
       case R.id.launch_product_query:
-        Log.d(TAG, "Got product query message");
+       Log.d(Constants.LOG_TAG, "Got product query message");
         String url = (String) message.obj;
 
         Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -124,7 +125,7 @@ public final class CaptureActivityHandler extends Handler {
         String browserPackageName = null;
         if (resolveInfo != null && resolveInfo.activityInfo != null) {
           browserPackageName = resolveInfo.activityInfo.packageName;
-          Log.d(TAG, "Using browser in package " + browserPackageName);
+         Log.d(Constants.LOG_TAG, "Using browser in package " + browserPackageName);
         }
 
         // Needed for default Android browser / Chrome only apparently
@@ -137,7 +138,7 @@ public final class CaptureActivityHandler extends Handler {
         try {
           activity.startActivity(intent);
         } catch (ActivityNotFoundException ignored) {
-          Log.w(TAG, "Can't find anything to handle VIEW of URI " + url);
+        	Log.d(Constants.LOG_TAG, "Can't find anything to handle VIEW of URI " + url);
         }
         break;
     }

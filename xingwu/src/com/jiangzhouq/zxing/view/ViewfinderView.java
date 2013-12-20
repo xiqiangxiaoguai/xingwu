@@ -17,6 +17,7 @@
 package com.jiangzhouq.zxing.view;
 
 import com.google.zxing.ResultPoint;
+import com.jiangzhouq.xingwu.Constants;
 import com.jiangzhouq.xingwu.R;
 import com.jiangzhouq.zxing.camera.CameraManager;
 
@@ -27,6 +28,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -82,21 +84,20 @@ public final class ViewfinderView extends View {
     if (cameraManager == null) {
       return; // not ready yet, early draw before done configuring
     }
-    Rect frame = cameraManager.getFramingRect();
+    Rect frame = cameraManager.getFramingRectInView();
     Rect previewFrame = cameraManager.getFramingRectInPreview();    
     if (frame == null || previewFrame == null) {
       return;
     }
     int width = canvas.getWidth();
     int height = canvas.getHeight();
-
+    Log.d(Constants.LOG_TAG, "viewfinderview canvas:" + width + " " + height + " rect:" + frame) ;
     // Draw the exterior (i.e. outside the framing rect) darkened
     paint.setColor(resultBitmap != null ? resultColor : maskColor);
     canvas.drawRect(0, 0, width, frame.top, paint);
     canvas.drawRect(0, frame.top, frame.left, frame.bottom + 1, paint);
     canvas.drawRect(frame.right + 1, frame.top, width, frame.bottom + 1, paint);
     canvas.drawRect(0, frame.bottom + 1, width, height, paint);
-
     if (resultBitmap != null) {
       // Draw the opaque result bitmap over the scanning rectangle
       paint.setAlpha(CURRENT_POINT_OPACITY);

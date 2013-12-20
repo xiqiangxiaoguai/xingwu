@@ -16,6 +16,8 @@
 
 package com.jiangzhouq.zxing.camera;
 
+import com.jiangzhouq.xingwu.Constants;
+
 import android.graphics.Point;
 import android.hardware.Camera;
 import android.os.Handler;
@@ -49,7 +51,7 @@ final class PreviewCallback implements Camera.PreviewCallback {
       message.sendToTarget();
       previewHandler = null;
     } else {
-      Log.d(TAG, "Got preview callback, but no handler or resolution available");
+    	Log.d(Constants.LOG_TAG, "Got preview callback, but no handler or resolution available");
     }
   }
 

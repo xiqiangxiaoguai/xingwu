@@ -24,6 +24,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import com.google.zxing.PlanarYUVLuminanceSource;
+import com.jiangzhouq.xingwu.Constants;
 
 import java.io.IOException;
 
@@ -98,8 +99,8 @@ public final class CameraManager {
       configManager.setDesiredCameraParameters(theCamera, false);
     } catch (RuntimeException re) {
       // Driver failed
-      Log.w(TAG, "Camera rejected parameters. Setting only minimal safe-mode parameters");
-      Log.i(TAG, "Resetting to saved camera params: " + parametersFlattened);
+      Log.d(Constants.LOG_TAG, "Camera rejected parameters. Setting only minimal safe-mode parameters");
+      Log.d(Constants.LOG_TAG, "Resetting to saved camera params: " + parametersFlattened);
       // Reset:
       if (parametersFlattened != null) {
         parameters = theCamera.getParameters();
@@ -109,7 +110,7 @@ public final class CameraManager {
           configManager.setDesiredCameraParameters(theCamera, true);
         } catch (RuntimeException re2) {
           // Well, darn. Give up
-          Log.w(TAG, "Camera rejected even safe-mode parameters! No configuration");
+          Log.d(Constants.LOG_TAG, "Camera rejected even safe-mode parameters! No configuration");
         }
       }
     }
@@ -142,7 +143,7 @@ public final class CameraManager {
     if (theCamera != null && !previewing) {
     	//jiangzhouq modified
     	//add camera display orientation : 90
-    	theCamera.setDisplayOrientation(90);
+//    	theCamera.setDisplayOrientation(90);
       theCamera.startPreview();
       previewing = true;
       autoFocusManager = new AutoFocusManager(context, camera);
@@ -222,12 +223,39 @@ public final class CameraManager {
       
       //jiangzhouq modify
       //modify the viewfinderview topoffset
-      int topOffset = (screenResolution.y - height) / 6;
+      int topOffset = (screenResolution.y - height) / 2;
       framingRect = new Rect(leftOffset, topOffset, leftOffset + width, topOffset + height);
-      Log.d(TAG, "Calculated framing rect: " + framingRect);
+      Log.d(Constants.LOG_TAG, "Calculated framing rect: " + framingRect);
     }
     return framingRect;
   }
+  /*
+   * add by jiangzhouq for viewfinderview
+   */
+  public synchronized Rect getFramingRectInView() {
+	    if (framingRect == null) {
+	      if (camera == null) {
+	        return null;
+	      }
+	      Point screenResolution = configManager.getScreenResolution();
+	      if (screenResolution == null) {
+	        // Called early, before init even finished
+	        return null;
+	      }
+
+	      int width = findDesiredDimensionInRange(screenResolution.x, MIN_FRAME_WIDTH, MAX_FRAME_WIDTH);
+	      int height = findDesiredDimensionInRange(screenResolution.y, MIN_FRAME_HEIGHT, MAX_FRAME_HEIGHT);
+
+	      int leftOffset = (screenResolution.x - width) / 2;
+	      
+	      //jiangzhouq modify
+	      //modify the viewfinderview topoffset
+	      int topOffset = (screenResolution.y - height) / 2;
+	      framingRect = new Rect(leftOffset, topOffset, leftOffset + width, topOffset + width);
+	      Log.d(Constants.LOG_TAG, "Calculated framing rect: " + framingRect);
+	    }
+	    return framingRect;
+	  }
   
   private static int findDesiredDimensionInRange(int resolution, int hardMin, int hardMax) {
     int dim = 5 * resolution / 8; // Target 5/8 of each dimension
@@ -257,11 +285,19 @@ public final class CameraManager {
         // Called early, before init even finished
         return null;
       }
-      rect.left = rect.left * cameraResolution.x / screenResolution.x;
-      rect.right = rect.right * cameraResolution.x / screenResolution.x;
-      rect.top = rect.top * cameraResolution.y / screenResolution.y;
-      rect.bottom = rect.bottom * cameraResolution.y / screenResolution.y;
+//      rect.left = rect.left * cameraResolution.x / screenResolution.x;
+//      rect.right = rect.right * cameraResolution.x / screenResolution.x;
+//      rect.top = rect.top * cameraResolution.y / screenResolution.y;
+//      rect.bottom = rect.bottom * cameraResolution.y / screenResolution.y;
+      rect.left = rect.left * cameraResolution.y / screenResolution.x;
+      rect.right = rect.right * cameraResolution.y / screenResolution.x;
+      rect.top = rect.top * cameraResolution.x / screenResolution.y;
+      rect.bottom = rect.bottom * cameraResolution.x / screenResolution.y;
+      
       framingRectInPreview = rect;
+      Log.d(Constants.LOG_TAG, "cameraResolution : " + cameraResolution.x + "*" + cameraResolution.y);
+      Log.d(Constants.LOG_TAG, "screenResolution : " + screenResolution.x + "*" + screenResolution.y);
+      Log.d(Constants.LOG_TAG, "Calculated framing Rect In Preview : " + framingRectInPreview);
     }
     return framingRectInPreview;
   }
@@ -285,7 +321,7 @@ public final class CameraManager {
       int leftOffset = (screenResolution.x - width) / 2;
       int topOffset = (screenResolution.y - height) / 2;
       framingRect = new Rect(leftOffset, topOffset, leftOffset + width, topOffset + height);
-      Log.d(TAG, "Calculated manual framing rect: " + framingRect);
+      Log.d(Constants.LOG_TAG, "Calculated manual framing rect: " + framingRect);
       framingRectInPreview = null;
     } else {
       requestedFramingRectWidth = width;
@@ -308,6 +344,7 @@ public final class CameraManager {
       return null;
     }
     // Go ahead and assume it's YUV rather than die.
+    Log.d(Constants.LOG_TAG,"buildLuminanceSource:height" +height + " rect:" + rect );
     return new PlanarYUVLuminanceSource(data, width, height, rect.left, rect.top,
                                         rect.width(), rect.height(), false);
   }

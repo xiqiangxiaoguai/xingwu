@@ -16,6 +16,8 @@
 
 package com.jiangzhouq.zxing.camera;
 
+import com.jiangzhouq.xingwu.Constants;
+
 import android.hardware.Camera;
 import android.util.Log;
 
@@ -33,7 +35,7 @@ public final class OpenCameraInterface {
     
     int numCameras = Camera.getNumberOfCameras();
     if (numCameras == 0) {
-      Log.w(TAG, "No cameras!");
+    	Log.d(Constants.LOG_TAG , "No cameras!");
       return null;
     }
 
@@ -49,10 +51,10 @@ public final class OpenCameraInterface {
     
     Camera camera;
     if (index < numCameras) {
-      Log.i(TAG, "Opening camera #" + index);
+    	Log.d(Constants.LOG_TAG, "Opening camera #" + index);
       camera = Camera.open(index);
     } else {
-      Log.i(TAG, "No camera facing back; returning camera #0");
+    	Log.d(Constants.LOG_TAG, "No camera facing back; returning camera #0");
       camera = Camera.open(0);
     }
 

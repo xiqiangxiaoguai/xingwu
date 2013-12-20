@@ -33,6 +33,8 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
+import com.jiangzhouq.xingwu.Constants;
+
 /**
  * A class which deals with reading, parsing, and setting the camera parameters which are used to
  * configure the camera hardware.
@@ -61,29 +63,43 @@ final class CameraConfigurationManager {
    * Reads, one time, values from the camera that are needed by the app.
    */
   void initFromCameraParameters(Camera camera) {
-    Camera.Parameters parameters = camera.getParameters();
-    WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-    Display display = manager.getDefaultDisplay();
-    Point theScreenResolution = new Point();
-    display.getSize(theScreenResolution);
-    screenResolution = theScreenResolution;
-    Log.i(TAG, "Screen resolution: " + screenResolution);
-    cameraResolution = findBestPreviewSizeValue(parameters, screenResolution);
-    Log.i(TAG, "Camera resolution: " + cameraResolution);
+//    Camera.Parameters parameters = camera.getParameters();
+//    WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+//    Display display = manager.getDefaultDisplay();
+//    Point theScreenResolution = new Point();
+//    display.getSize(theScreenResolution);
+//    screenResolution = theScreenResolution;
+//    Log.d(Constants.LOG_TAG, "Screen resolution: " + screenResolution);
+//    cameraResolution = findBestPreviewSizeValue(parameters, screenResolution);
+//    Log.d(Constants.LOG_TAG, "Camera resolution: " + cameraResolution);
+	  
+	  Camera.Parameters parameters = camera.getParameters();
+      WindowManager manager = (WindowManager) context .getSystemService(Context.WINDOW_SERVICE);
+      Display display = manager.getDefaultDisplay();
+      int width = display.getWidth();
+      int height = display.getHeight();
+      if (width < height) {
+           int temp = width;
+           width = height;
+           height = temp;
+      }
+      screenResolution = new Point(height, width);
+      cameraResolution = findBestPreviewSizeValue(parameters, new Point(width, height));
+      
   }
 
   void setDesiredCameraParameters(Camera camera, boolean safeMode) {
     Camera.Parameters parameters = camera.getParameters();
 
     if (parameters == null) {
-      Log.w(TAG, "Device error: no camera parameters are available. Proceeding without configuration.");
+      Log.d(Constants.LOG_TAG, "Device error: no camera parameters are available. Proceeding without configuration.");
       return;
     }
 
-    Log.i(TAG, "Initial camera parameters: " + parameters.flatten());
+    Log.d(Constants.LOG_TAG, "Initial camera parameters: " + parameters.flatten());
 
     if (safeMode) {
-      Log.w(TAG, "In camera config safe mode -- most settings will not be honored");
+      Log.d(Constants.LOG_TAG, "In camera config safe mode -- most settings will not be honored");
     }
 
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -110,14 +126,14 @@ final class CameraConfigurationManager {
 //        parameters.setColorEffect(colorMode);
 //      }
 //    }
-
     parameters.setPreviewSize(cameraResolution.x, cameraResolution.y);
+    camera.setDisplayOrientation(90);
     camera.setParameters(parameters);
 
     Camera.Parameters afterParameters = camera.getParameters();
     Camera.Size afterSize = afterParameters.getPreviewSize();
     if (afterSize!= null && (cameraResolution.x != afterSize.width || cameraResolution.y != afterSize.height)) {
-      Log.w(TAG, "Camera said it supported preview size " + cameraResolution.x + 'x' + cameraResolution.y +
+      Log.d(Constants.LOG_TAG, "Camera said it supported preview size " + cameraResolution.x + 'x' + cameraResolution.y +
                  ", but after setting it, preview size is " + afterSize.width + 'x' + afterSize.height);
       cameraResolution.x = afterSize.width;
       cameraResolution.y = afterSize.height;
@@ -186,10 +202,10 @@ final class CameraConfigurationManager {
             // Light off; set high compensation
             desiredCompensation = Math.min((int) (MAX_EXPOSURE_COMPENSATION / step), maxExposure);
           }
-          Log.i(TAG, "Setting exposure compensation to " + desiredCompensation + " / " + (step * desiredCompensation));
+          Log.d(Constants.LOG_TAG, "Setting exposure compensation to " + desiredCompensation + " / " + (step * desiredCompensation));
           parameters.setExposureCompensation(desiredCompensation);
         } else {
-          Log.i(TAG, "Camera does not support exposure compensation");
+          Log.d(Constants.LOG_TAG, "Camera does not support exposure compensation");
         }
       }
     }
@@ -200,7 +216,7 @@ final class CameraConfigurationManager {
 
     List<Camera.Size> rawSupportedSizes = parameters.getSupportedPreviewSizes();
     if (rawSupportedSizes == null) {
-      Log.w(TAG, "Device returned no supported preview sizes; using default");
+      Log.d(Constants.LOG_TAG, "Device returned no supported preview sizes; using default");
       Camera.Size defaultSize = parameters.getPreviewSize();
       return new Point(defaultSize.width, defaultSize.height);
     }
@@ -228,7 +244,7 @@ final class CameraConfigurationManager {
         previewSizesString.append(supportedPreviewSize.width).append('x')
             .append(supportedPreviewSize.height).append(' ');
       }
-      Log.i(TAG, "Supported preview sizes: " + previewSizesString);
+      Log.d(Constants.LOG_TAG, "Supported preview sizes: " + previewSizesString);
     }
 
     double screenAspectRatio = (double) screenResolution.x / (double) screenResolution.y;
@@ -256,7 +272,7 @@ final class CameraConfigurationManager {
 
       if (maybeFlippedWidth == screenResolution.x && maybeFlippedHeight == screenResolution.y) {
         Point exactPoint = new Point(realWidth, realHeight);
-        Log.i(TAG, "Found preview size exactly matching screen size: " + exactPoint);
+        Log.d(Constants.LOG_TAG, "Found preview size exactly matching screen size: " + exactPoint);
         return exactPoint;
       }
     }
@@ -267,20 +283,20 @@ final class CameraConfigurationManager {
     if (!supportedPreviewSizes.isEmpty()) {
       Camera.Size largestPreview = supportedPreviewSizes.get(0);
       Point largestSize = new Point(largestPreview.width, largestPreview.height);
-      Log.i(TAG, "Using largest suitable preview size: " + largestSize);
+      Log.d(Constants.LOG_TAG, "Using largest suitable preview size: " + largestSize);
       return largestSize;
     }
 
     // If there is nothing at all suitable, return current preview size
     Camera.Size defaultPreview = parameters.getPreviewSize();
     Point defaultSize = new Point(defaultPreview.width, defaultPreview.height);
-    Log.i(TAG, "No suitable preview sizes, using default: " + defaultSize);
+    Log.d(Constants.LOG_TAG, "No suitable preview sizes, using default: " + defaultSize);
     return defaultSize;
   }
 
   private static String findSettableValue(Collection<String> supportedValues,
                                           String... desiredValues) {
-    Log.i(TAG, "Supported values: " + supportedValues);
+    Log.d(Constants.LOG_TAG, "Supported values: " + supportedValues);
     String result = null;
     if (supportedValues != null) {
       for (String desiredValue : desiredValues) {
@@ -290,7 +306,7 @@ final class CameraConfigurationManager {
         }
       }
     }
-    Log.i(TAG, "Settable value: " + result);
+    Log.d(Constants.LOG_TAG, "Settable value: " + result);
     return result;
   }
 

@@ -20,6 +20,7 @@ import com.google.zxing.Result;
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.ParsedResultType;
 import com.google.zxing.client.result.ResultParser;
+import com.jiangzhouq.xingwu.Constants;
 import com.jiangzhouq.xingwu.R;
 
 import android.app.Activity;
@@ -227,7 +228,7 @@ public abstract class ResultHandler {
     try {
       launchIntent(intent);
     } catch (ActivityNotFoundException ignored) {
-      Log.w(TAG, "Nothing available to handle " + intent);
+    	Log.d(Constants.LOG_TAG, "Nothing available to handle " + intent);
     }
   }
 
@@ -246,7 +247,7 @@ public abstract class ResultHandler {
   final void rawLaunchIntent(Intent intent) {
     if (intent != null) {
       intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-      Log.d(TAG, "Launching intent: " + intent + " with extras: " + intent.getExtras());
+      Log.d(Constants.LOG_TAG, "Launching intent: " + intent + " with extras: " + intent.getExtras());
       activity.startActivity(intent);
     }
   }

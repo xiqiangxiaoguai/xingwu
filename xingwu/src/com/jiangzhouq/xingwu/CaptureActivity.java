@@ -14,6 +14,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
@@ -46,7 +47,7 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 	public CameraManager getCameraManager() {
 		return cameraManager;
 	}
-
+	private ImageView test;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -58,6 +59,7 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 		hasSurface = false;
 		beepManager = new BeepManager(this);
 		ambientLightManager = new AmbientLightManager(this);
+		test = (ImageView) findViewById(R.id.test);
 	}
 
 	@Override
@@ -156,10 +158,11 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 		if (fromLiveScan) {
 			beepManager.playBeepSoundAndVibrate();
 		}
-		Intent intent = new Intent();
-		intent.putExtra(Constants.BUNDLE_KEY_SN, rawResult.getText());
-		CaptureActivity.this.setResult(RESULT_OK, intent);
-		CaptureActivity.this.finish();
+		test.setImageBitmap(barcode);
+//		Intent intent = new Intent();
+//		intent.putExtra(Constants.BUNDLE_KEY_SN, rawResult.getText());
+//		CaptureActivity.this.setResult(RESULT_OK, intent);
+//		CaptureActivity.this.finish();
 	}
 
 	@Override
