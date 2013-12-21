@@ -24,7 +24,9 @@
 	    android:layout_marginLeft="10dp"
 	    android:layout_marginRight="10dp"
 	    android:layout_centerInParent="true"
-	    android:hint="@string/sn_editor_display"/>
+	    android:hint="@string/sn_editor_display"
+	    android:singleLine="true"
+	    android:inputType="textUri|textMultiLine"/>
 	<Button 
 	    android:id="@+id/login"
 	    android:layout_height="wrap_content"

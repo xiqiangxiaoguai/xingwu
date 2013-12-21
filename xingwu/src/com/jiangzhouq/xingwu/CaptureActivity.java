@@ -7,6 +7,8 @@ import java.util.Map;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.hardware.Camera;
+import android.hardware.Camera.Size;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -14,7 +16,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
@@ -47,7 +49,6 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 	public CameraManager getCameraManager() {
 		return cameraManager;
 	}
-	private ImageView test;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -59,7 +60,6 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 		hasSurface = false;
 		beepManager = new BeepManager(this);
 		ambientLightManager = new AmbientLightManager(this);
-		test = (ImageView) findViewById(R.id.test);
 	}
 
 	@Override
@@ -72,7 +72,7 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 		handler = null;
 		SurfaceView surfaceView = (SurfaceView) findViewById(R.id.preview_view);
 		SurfaceHolder surfaceHolder = surfaceView.getHolder();
-
+		
 		if (hasSurface) {
 			// The activity was paused but not stopped, so the surface still
 			// exists. Therefore
@@ -158,17 +158,41 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 		if (fromLiveScan) {
 			beepManager.playBeepSoundAndVibrate();
 		}
-		test.setImageBitmap(barcode);
-//		Intent intent = new Intent();
-//		intent.putExtra(Constants.BUNDLE_KEY_SN, rawResult.getText());
-//		CaptureActivity.this.setResult(RESULT_OK, intent);
-//		CaptureActivity.this.finish();
+		if (Constants.LOG_SWITCH)
+			Log.d(Constants.LOG_TAG, "test image size:" + barcode.getWidth() + "*" + barcode.getHeight());
+		Intent intent = new Intent();
+		intent.putExtra(Constants.BUNDLE_KEY_SN, rawResult.getText());
+		CaptureActivity.this.setResult(RESULT_OK, intent);
+		CaptureActivity.this.finish();
 	}
 
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
-
+		Camera camera = cameraManager.getCamera();
+		if(camera != null){
+			SurfaceView surfaceView = (SurfaceView) findViewById(R.id.preview_view);
+			Camera.Parameters parameters = camera.getParameters();// 获得相机参数
+			Size s = parameters.getPreviewSize();
+			double w = s.height;
+			double h = s.width;
+			if (Constants.LOG_SWITCH)
+				Log.d(Constants.LOG_TAG, "camera w:" + w + " h:" + h);
+			RelativeLayout.LayoutParams params = null;
+			
+			if((double)width/w < (double)height/h){
+				params = new RelativeLayout.LayoutParams( (int)(height*(w/h)), height);
+			}else{
+				params = new RelativeLayout.LayoutParams( width, (int)(width*(h/w)));
+			}
+			cameraManager.initFromCameraParameters(width, height);
+			params.addRule(RelativeLayout.CENTER_IN_PARENT);
+			surfaceView.setLayoutParams(params);
+			camera.setParameters(parameters);// 设置相机参数
+			camera.startPreview();// 开始预览
+			if (Constants.LOG_SWITCH)
+				Log.d(Constants.LOG_TAG, "surfaceChanged w: " + surfaceView.getWidth() + " h:" + surfaceView.getHeight());
+		}
 	}
 
 	@Override
@@ -178,6 +202,9 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 				Log.d(Constants.LOG_TAG,
 						"*** WARNING *** surfaceCreated() gave us a null surface!");
 		}
+		SurfaceView surfaceView = (SurfaceView) findViewById(R.id.preview_view);
+		if (Constants.LOG_SWITCH)
+			Log.d(Constants.LOG_TAG, "onresume surfaceView.size:" + surfaceView.getHeight() +" " + surfaceView.getWidth());
 		if (!hasSurface) {
 			hasSurface = true;
 			initCamera(holder);

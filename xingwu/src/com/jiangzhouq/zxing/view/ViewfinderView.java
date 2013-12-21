@@ -16,10 +16,9 @@
 
 package com.jiangzhouq.zxing.view;
 
-import com.google.zxing.ResultPoint;
-import com.jiangzhouq.xingwu.Constants;
-import com.jiangzhouq.xingwu.R;
-import com.jiangzhouq.zxing.camera.CameraManager;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -28,11 +27,11 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.google.zxing.ResultPoint;
+import com.jiangzhouq.xingwu.R;
+import com.jiangzhouq.zxing.camera.CameraManager;
 
 /**
  * This view is overlaid on top of the camera preview. It adds the viewfinder rectangle and partial
@@ -58,7 +57,7 @@ public final class ViewfinderView extends View {
   private int scannerAlpha;
   private List<ResultPoint> possibleResultPoints;
   private List<ResultPoint> lastPossibleResultPoints;
-
+  private int height_status = 0;
   // This constructor is used when the class is built from an XML resource.
   public ViewfinderView(Context context, AttributeSet attrs) {
     super(context, attrs);
@@ -73,8 +72,27 @@ public final class ViewfinderView extends View {
     scannerAlpha = 0;
     possibleResultPoints = new ArrayList<ResultPoint>(5);
     lastPossibleResultPoints = null;
+    height_status = getStatusBarHeight(context);
   }
-
+  
+//获取手机状态栏高度
+  public static int getStatusBarHeight(Context context){
+      Class<?> c = null;
+      Object obj = null;
+      Field field = null;
+      int x = 0, statusBarHeight = 0;
+      try {
+          c = Class.forName("com.android.internal.R$dimen");
+          obj = c.newInstance();
+          field = c.getField("status_bar_height");
+          x = Integer.parseInt(field.get(obj).toString());
+          statusBarHeight = context.getResources().getDimensionPixelSize(x);
+      } catch (Exception e1) {
+          e1.printStackTrace();
+      } 
+      return statusBarHeight;
+  }
+  
   public void setCameraManager(CameraManager cameraManager) {
     this.cameraManager = cameraManager;
   }
@@ -84,14 +102,14 @@ public final class ViewfinderView extends View {
     if (cameraManager == null) {
       return; // not ready yet, early draw before done configuring
     }
-    Rect frame = cameraManager.getFramingRectInView();
+    Rect frame = cameraManager.getFramingRect();
     Rect previewFrame = cameraManager.getFramingRectInPreview();    
     if (frame == null || previewFrame == null) {
       return;
     }
     int width = canvas.getWidth();
+    
     int height = canvas.getHeight();
-    Log.d(Constants.LOG_TAG, "viewfinderview canvas:" + width + " " + height + " rect:" + frame) ;
     // Draw the exterior (i.e. outside the framing rect) darkened
     paint.setColor(resultBitmap != null ? resultColor : maskColor);
     canvas.drawRect(0, 0, width, frame.top, paint);

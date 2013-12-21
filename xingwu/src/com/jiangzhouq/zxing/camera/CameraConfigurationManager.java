@@ -62,6 +62,32 @@ final class CameraConfigurationManager {
   /**
    * Reads, one time, values from the camera that are needed by the app.
    */
+  void initFromCameraParameters(Camera camera, int cWidth, int cHeight) {
+//    Camera.Parameters parameters = camera.getParameters();
+//    WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+//    Display display = manager.getDefaultDisplay();
+//    Point theScreenResolution = new Point();
+//    display.getSize(theScreenResolution);
+//    screenResolution = theScreenResolution;
+//    Log.d(Constants.LOG_TAG, "Screen resolution: " + screenResolution);
+//    cameraResolution = findBestPreviewSizeValue(parameters, screenResolution);
+//    Log.d(Constants.LOG_TAG, "Camera resolution: " + cameraResolution);
+	  
+	  Camera.Parameters parameters = camera.getParameters();
+      WindowManager manager = (WindowManager) context .getSystemService(Context.WINDOW_SERVICE);
+      Display display = manager.getDefaultDisplay();
+      int width = display.getWidth();
+      int height = display.getHeight();
+      if (width < height) {
+           int temp = width;
+           width = height;
+           height = temp;
+      }
+      screenResolution = new Point(cWidth, cHeight);
+      cameraResolution = findBestPreviewSizeValue(parameters, new Point(width, height));
+      
+  }
+  
   void initFromCameraParameters(Camera camera) {
 //    Camera.Parameters parameters = camera.getParameters();
 //    WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -127,6 +153,7 @@ final class CameraConfigurationManager {
 //      }
 //    }
     parameters.setPreviewSize(cameraResolution.x, cameraResolution.y);
+    parameters.setPictureSize(cameraResolution.x, cameraResolution.y);
     camera.setDisplayOrientation(90);
     camera.setParameters(parameters);
 

@@ -16,6 +16,8 @@
 
 package com.jiangzhouq.zxing.camera;
 
+import java.io.IOException;
+
 import android.content.Context;
 import android.graphics.Point;
 import android.graphics.Rect;
@@ -23,10 +25,9 @@ import android.hardware.Camera;
 import android.os.Handler;
 import android.util.Log;
 import android.view.SurfaceHolder;
+
 import com.google.zxing.PlanarYUVLuminanceSource;
 import com.jiangzhouq.xingwu.Constants;
-
-import java.io.IOException;
 
 /**
  * This object wraps the Camera service object and expects to be the only one talking to it. The
@@ -66,6 +67,9 @@ public final class CameraManager {
     previewCallback = new PreviewCallback(configManager);
   }
 
+  public synchronized void initFromCameraParameters(int width, int  height){
+	  configManager.initFromCameraParameters(camera, width, height);
+  }
   /**
    * Opens the camera driver and initializes the hardware parameters.
    *
@@ -120,7 +124,10 @@ public final class CameraManager {
   public synchronized boolean isOpen() {
     return camera != null;
   }
-
+  public synchronized Camera getCamera() {
+	    if( camera != null) return camera;
+		return null;
+	  }
   /**
    * Closes the camera driver if still in use.
    */
@@ -217,46 +224,18 @@ public final class CameraManager {
       }
 
       int width = findDesiredDimensionInRange(screenResolution.x, MIN_FRAME_WIDTH, MAX_FRAME_WIDTH);
-      int height = findDesiredDimensionInRange(screenResolution.y, MIN_FRAME_HEIGHT, MAX_FRAME_HEIGHT);
-
+//      int height = findDesiredDimensionInRange(screenResolution.y, MIN_FRAME_HEIGHT, MAX_FRAME_HEIGHT);
+      int height = width;
       int leftOffset = (screenResolution.x - width) / 2;
       
       //jiangzhouq modify
       //modify the viewfinderview topoffset
-      int topOffset = (screenResolution.y - height) / 2;
+      int topOffset = (screenResolution.y - height) / 4;
       framingRect = new Rect(leftOffset, topOffset, leftOffset + width, topOffset + height);
       Log.d(Constants.LOG_TAG, "Calculated framing rect: " + framingRect);
     }
     return framingRect;
   }
-  /*
-   * add by jiangzhouq for viewfinderview
-   */
-  public synchronized Rect getFramingRectInView() {
-	    if (framingRect == null) {
-	      if (camera == null) {
-	        return null;
-	      }
-	      Point screenResolution = configManager.getScreenResolution();
-	      if (screenResolution == null) {
-	        // Called early, before init even finished
-	        return null;
-	      }
-
-	      int width = findDesiredDimensionInRange(screenResolution.x, MIN_FRAME_WIDTH, MAX_FRAME_WIDTH);
-	      int height = findDesiredDimensionInRange(screenResolution.y, MIN_FRAME_HEIGHT, MAX_FRAME_HEIGHT);
-
-	      int leftOffset = (screenResolution.x - width) / 2;
-	      
-	      //jiangzhouq modify
-	      //modify the viewfinderview topoffset
-	      int topOffset = (screenResolution.y - height) / 2;
-	      framingRect = new Rect(leftOffset, topOffset, leftOffset + width, topOffset + width);
-	      Log.d(Constants.LOG_TAG, "Calculated framing rect: " + framingRect);
-	    }
-	    return framingRect;
-	  }
-  
   private static int findDesiredDimensionInRange(int resolution, int hardMin, int hardMax) {
     int dim = 5 * resolution / 8; // Target 5/8 of each dimension
     if (dim < hardMin) {

@@ -9,6 +9,14 @@
     <string name="cancel">取消</string>
     <string name="sn_editor_display">请输入序列号</string>
     <string name="setting">设置</string>
-    <string name="setting_pw_title">本地密码管理</string>
+    <string name="setting_pw_title">密码管理</string>
+    <string name="pw_cancel">关闭密码</string>
+    <string name="pw_change">修改密码</string>
+    <string name="pw_create">创建密码</string>
+    <string name="pw_first">请输入密码</string>
+    <string name="pw_first_confirm">请再次输入密码</string>
+    <string name="pw_old">请输入旧密码</string>
+    <string name="pw_new">请输入新密码</string>
+    <string name="pw_new_confirm">请再次输入新密码</string>
     <string name="setting_update_title">在线更新</string>
 </resources>

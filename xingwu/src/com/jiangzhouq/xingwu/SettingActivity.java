@@ -2,7 +2,10 @@ package com.jiangzhouq.xingwu;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -40,6 +43,7 @@ public class SettingActivity extends Activity implements OnClickListener{
 	public void onClick(View v) {
 		switch(v.getId()){
 		case R.id.pw:
+			startActivity(new Intent(this, PwManagerActivity.class));
 			break;
 		case R.id.update:
 			UmengUpdateAgent.forceUpdate(this);

@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <TextView 
+            android:id="@+id/state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="@string/pw_first"
+            android:layout_centerHorizontal="true"
+            android:layout_above="@+id/pw_items"
+            android:textSize="24sp"/>
+        <LinearLayout
+            android:id="@+id/pw_items"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" 
+            android:layout_centerInParent="true">
+            <com.jiangzhouq.xingwu.view.MyImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bg_pw_item"
+                android:padding="1dp"
+                android:scaleType="centerInside"
+                android:layout_margin="1dp"/>
+
+            <com.jiangzhouq.xingwu.view.MyImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bg_pw_item"
+                android:padding="1dp"
+                android:scaleType="centerInside"
+                android:layout_margin="1dp"/>
+
+            <com.jiangzhouq.xingwu.view.MyImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bg_pw_item"
+                android:padding="1dp"
+                android:scaleType="centerInside"
+                android:layout_margin="1dp"/>
+
+            <com.jiangzhouq.xingwu.view.MyImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bg_pw_item"
+                android:padding="1dp"
+                android:scaleType="centerInside"
+                android:layout_margin="1dp"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" 
+        android:orientation="vertical">
+		<LinearLayout 
+		    android:layout_height="0dp"
+		    android:layout_weight="1"
+		    android:layout_width="match_parent">
+		    <Button
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:id="@+id/one"
+                android:text="1" 
+                android:textSize="32sp"
+                />
+            <Button
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:id="@+id/two"
+                android:text="2" />
+            <Button
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:id="@+id/three"
+                android:text="3" />
+		</LinearLayout>
+		<LinearLayout 
+		    android:layout_height="0dp"
+		    android:layout_weight="1"
+		    android:layout_width="match_parent">
+		    <Button
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:id="@+id/four"
+                android:text="4" />
+            <Button
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:id="@+id/five"
+                android:text="5" />
+            <Button
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:id="@+id/six"
+                android:text="6" />
+		</LinearLayout>
+		<LinearLayout 
+		    android:layout_height="0dp"
+		    android:layout_weight="1"
+		    android:layout_width="match_parent">
+		    <Button
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:id="@+id/seven"
+                android:text="7" />
+            <Button
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:id="@+id/eight"
+                android:text="8" />
+            <Button
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:id="@+id/nine"
+                android:text="9" />
+		</LinearLayout>
+		<LinearLayout 
+		    android:layout_height="0dp"
+		    android:layout_weight="1"
+		    android:layout_width="match_parent">
+            <Button
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:text="" />
+            <Button
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:id="@+id/zero"
+                android:text="0" />
+            <Button
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:id="@+id/del"
+                android:text="-" />
+		</LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
