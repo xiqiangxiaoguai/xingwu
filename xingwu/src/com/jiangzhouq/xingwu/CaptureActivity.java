@@ -13,7 +13,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.hardware.Camera;
 import android.hardware.Camera.Size;
-import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
@@ -28,22 +27,18 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.ChecksumException;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.FormatException;
-import com.google.zxing.MultiFormatReader;
 import com.google.zxing.NotFoundException;
 import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.QRCodeReader;
 import com.jiangzhouq.zxing.camera.CameraManager;
-import com.jiangzhouq.zxing.decode.BitmapLuminanceSource;
 import com.jiangzhouq.zxing.decode.CaptureActivityHandler;
-import com.jiangzhouq.zxing.decode.RGBLuminanceSource;
 import com.jiangzhouq.zxing.decode.ResultHandler;
 import com.jiangzhouq.zxing.decode.ResultHandlerFactory;
 import com.jiangzhouq.zxing.view.ViewfinderView;
@@ -81,7 +76,6 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 				break;
 			}
 		};
-		
 	};
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -201,12 +195,12 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 		if (fromLiveScan) {
 			beepManager.playBeepSoundAndVibrate();
 		}
-		if (Constants.LOG_SWITCH)
-			Log.d(Constants.LOG_TAG, "test image size:" + barcode.getWidth() + "*" + barcode.getHeight());
-		Intent intent = new Intent();
-		intent.putExtra(Constants.BUNDLE_KEY_SN, rawResult.getText());
-		CaptureActivity.this.setResult(RESULT_OK, intent);
-		CaptureActivity.this.finish();
+//		if (Constants.LOG_SWITCH)
+//			Log.d(Constants.LOG_TAG, "test image size:" + barcode.getWidth() + "*" + barcode.getHeight());
+//		Intent intent = new Intent();
+//		intent.putExtra(Constants.BUNDLE_KEY_SN, rawResult.getText());
+//		CaptureActivity.this.setResult(RESULT_OK, intent);
+//		CaptureActivity.this.finish();
 	}
 
 	@Override
@@ -333,51 +327,66 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 		
 	}
 	Bitmap scanBitmap;
-	Result scanningImage(String path) {  
-		
-		 if(TextUtils.isEmpty(path)){  
-		        return null;  
-		    } 
-		 
-		MultiFormatReader multiFormatReader = new MultiFormatReader();
-
-		Hashtable<DecodeHintType, Object> hints = new Hashtable<DecodeHintType, Object>(
-				2);
-		Vector<BarcodeFormat> decodeFormats = new Vector<BarcodeFormat>();
-		if (decodeFormats == null || decodeFormats.isEmpty()) {
-			decodeFormats = new Vector<BarcodeFormat>();
-
-			decodeFormats.addAll(DecodeFormatManager.ONE_D_FORMATS);
-			decodeFormats.addAll(DecodeFormatManager.QR_CODE_FORMATS);
-			decodeFormats.addAll(DecodeFormatManager.DATA_MATRIX_FORMATS);
+	private Result scanningImage(String path) {
+		if (TextUtils.isEmpty(path)) {
+			return null;
 		}
-		hints.put(DecodeHintType.POSSIBLE_FORMATS, decodeFormats);
-
-		 hints.put(DecodeHintType.CHARACTER_SET, "UTF8");
-
-		multiFormatReader.setHints(hints);
-		BitmapFactory.Options options = new BitmapFactory.Options();  
-	    options.inJustDecodeBounds = true; // 先获取原大小  
-	    scanBitmap = BitmapFactory.decodeFile(path, options);  
-	    options.inJustDecodeBounds = false; // 获取新的大小  
-	    int sampleSize = (int) (options.outHeight / (float) 200);  
-	    if (sampleSize <= 0)  
-	        sampleSize = 1;  
-	    options.inSampleSize = sampleSize;  
-	    scanBitmap = BitmapFactory.decodeFile(path, options); 
-	    mhandler.sendEmptyMessage(0);
-		Result rawResult = null;
+		BitmapFactory.Options options = new BitmapFactory.Options();
+		options.inJustDecodeBounds = true; // 先获取原大小
+		scanBitmap = BitmapFactory.decodeFile(path, null);
+//		options.inJustDecodeBounds = false; // 获取新的大小
+//		int sampleSize = (int) (options.outHeight / (float) 200);
+//		if (sampleSize <= 0)
+//			sampleSize = 1;
+//		options.inSampleSize = sampleSize;
+//		scanBitmap = BitmapFactory.decodeFile(path, options);
+		
+		mhandler.sendEmptyMessage(0);
+		
+		// 解码的参数  
+		Hashtable<DecodeHintType, Object> hints = new Hashtable<DecodeHintType, Object>(  
+		        2);  
+		// 可以解析的编码类型  
+		Vector<BarcodeFormat> decodeFormats = new Vector<BarcodeFormat>();  
+		if (decodeFormats == null || decodeFormats.isEmpty()) {  
+		    decodeFormats = new Vector<BarcodeFormat>();  
+		  
+		    // 这里设置可扫描的类型，我这里选择了都支持  
+		    decodeFormats.addAll(DecodeFormatManager.ONE_D_FORMATS);  
+		    decodeFormats.addAll(DecodeFormatManager.QR_CODE_FORMATS);  
+		    decodeFormats.addAll(DecodeFormatManager.DATA_MATRIX_FORMATS);  
+		}  
+		hints.put(DecodeHintType.POSSIBLE_FORMATS, decodeFormats);  
+		  
+		// 设置继续的字符编码格式为UTF8  
+		 hints.put(DecodeHintType.CHARACTER_SET, "UTF8"); 
+		
+//		HashMap<DecodeHintType, String> hints = new HashMap<DecodeHintType, String>();
+//		hints.put(DecodeHintType.CHARACTER_SET, "utf8");
+		RGBLuminanceSource source = new RGBLuminanceSource(scanBitmap);
+		BinaryBitmap bitmap1 = new BinaryBitmap(new HybridBinarizer(source));
+		QRCodeReader reader2 = new QRCodeReader();
+//		MultiFormatReader reader2 = new MultiFormatReader();
+		Result result = null;
 		try {
-			rawResult = multiFormatReader
-					.decodeWithState(new BinaryBitmap(new HybridBinarizer(
-							new BitmapLuminanceSource(scanBitmap))));
+			result = reader2.decode(bitmap1, hints);
+			if (Constants.LOG_SWITCH)
+				Log.d(Constants.LOG_TAG2, "result:" + result.getText());
+			return result;
 		} catch (NotFoundException e) {
-			// TODO Auto-generated catch block
+			if (Constants.LOG_SWITCH)
+				Log.d(Constants.LOG_TAG2, "e:" + e);
+			e.printStackTrace();
+		} catch (ChecksumException e) {
+			if (Constants.LOG_SWITCH)
+				Log.d(Constants.LOG_TAG2, "e:" + e);
+			e.printStackTrace();
+		} catch (FormatException e) {
+			if (Constants.LOG_SWITCH)
+				Log.d(Constants.LOG_TAG2, "e:" + e);
 			e.printStackTrace();
 		}
-		if(null != rawResult)
-			return rawResult;
-		return null;
+		return result;
 	}  
 	
 }
