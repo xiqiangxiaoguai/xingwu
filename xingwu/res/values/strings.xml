@@ -19,4 +19,6 @@
     <string name="pw_new">请输入新密码</string>
     <string name="pw_new_confirm">请再次输入新密码</string>
     <string name="setting_update_title">在线更新</string>
+    <string name="gallery">相册</string>
+    <string name="flash">开灯</string>
 </resources>

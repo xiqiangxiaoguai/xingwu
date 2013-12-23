@@ -74,6 +74,9 @@ final class AmbientLightManager implements SensorEventListener {
     }
   }
 
+  public void setTorch(boolean bool){
+	  cameraManager.setTorch(bool);
+  }
   @Override
   public void onAccuracyChanged(Sensor sensor, int accuracy) {
     // do nothing

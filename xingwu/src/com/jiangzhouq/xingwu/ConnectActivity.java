@@ -1,9 +1,11 @@
 package com.jiangzhouq.xingwu;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 
 import tvb.boxclient.Login;
 import tvb.boxclient.Login.EXmppState;
+import tvb.boxclient.PeerConn;
 import tvb.boxclient.Presence;
 import tvb.boxclient.Presence.EPresStatus;
 import android.app.Activity;
@@ -14,11 +16,20 @@ import android.os.Message;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class ConnectActivity extends Activity implements Login.IXmppStateObserver, Presence.IPresenceStatusObserver{
 	
 	private final int HANDLER_PRESENCE_UPDATE = 0;
+	private final int HANDLER_XAMPP_STATE_UPDATE = 1;
+	
+	private final int MESSAGE_E_XMPP_STATE_START = 0;
+	private final int MESSAGE_E_XMPP_STATE_OPENING = 1;
+	private final int MESSAGE_E_XMPP_STATE_OPEN = 2;
+	private final int MESSAGE_E_XMPP_STATE_CLOSED = 3;
 	
 	private Login          mLogin = null;
 	private final Presence       mPresence       = new Presence();
@@ -28,10 +39,10 @@ public class ConnectActivity extends Activity implements Login.IXmppStateObserve
 	
 	private Handler mHandler = new Handler(){
 		public void handleMessage(Message msg) {
+			Bundle bundle = msg.getData();
 			switch(msg.what){
 				case HANDLER_PRESENCE_UPDATE:
 					String nullString = "none";
-					Bundle bundle = msg.getData();
 					boolean bAvailable = bundle.getBoolean("bAvailable", false);
 					String strJid = bundle.getString("strJid",nullString);
 					if(strJid.equals(nullString)){
@@ -52,9 +63,31 @@ public class ConnectActivity extends Activity implements Login.IXmppStateObserve
 		    			mTvContent.setText(strContent);
 		    		}
 					break;
+				case HANDLER_XAMPP_STATE_UPDATE:
+					switch(bundle.getInt("state")){
+					case MESSAGE_E_XMPP_STATE_START:
+						mTvContent.setText("准备上线...");
+						break;
+					case MESSAGE_E_XMPP_STATE_OPENING:
+						mTvContent.setText("正在上线...");
+						break;
+					case MESSAGE_E_XMPP_STATE_OPEN:
+			    		mTvContent = (TextView) findViewById(R.id.tv_content);		
+						mTvContent.setText("等待好友上线...");
+			            mPresence.AddPresStatusObserver(Observer);
+						mPresence.SetPresStatus(true, EPresStatus.E_PRES_SHOW_ONLINE);
+						break;
+					case MESSAGE_E_XMPP_STATE_CLOSED:
+						mTvContent.setText("关闭...");
+						break;
+					}
+					break;
 			}
+			if (Constants.LOG_SWITCH)
+				Log.d(Constants.LOG_TAG, (String) mTvContent.getText());
 		};
 	};
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -62,28 +95,32 @@ public class ConnectActivity extends Activity implements Login.IXmppStateObserve
 		
 		Intent intent = getIntent();
 		Bundle bundle = intent.getExtras();
-		String sn = bundle.getString(Constants.BUNDLE_KEY_SN);
+		final String sn = bundle.getString(Constants.BUNDLE_KEY_SN);
 		mTvContent = (TextView) findViewById(R.id.tv_content);
 		if(null == sn || sn.isEmpty()){
 			if (Constants.LOG_SWITCH)
 				Log.d(Constants.LOG_TAG, "sn ConnectActivity received is empty or null!");
 			return;
 		}
-		
 		mTvContent.setText(sn);
-//		if(!sn.isEmpty()){
-//			mLogin = new Login(sn, sn, Constants.TVB_LOGIN_SERVER_IP, Constants.TVB_LOGIN_TAG);
-//			mLogin.AddXmppStateObserver(Observer);
-//			mLogin.DoLogin();
-//		}
+		ImageView image = (ImageView) findViewById(R.id.tv_state);
+		image.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				mLogin = new Login(sn, sn, Constants.TVB_LOGIN_SERVER_IP, Constants.TVB_LOGIN_TAG);
+				mLogin.AddXmppStateObserver(Observer);
+				abortUnless(PeerConn.InitAndroidGlobals(this), "Failed to initializeAndroidGlobals");
+				mLogin.DoLogin();
+			}
+		});
 	}
 	
 	@Override
 	protected void onDestroy() {
-//		mPresence.SetPresStatus(false, EPresStatus.E_PRES_SHOW_OFFLINE);
-//		mPresence.RemovePresStatusObserver();
-//		mLogin.RemoveXmppStateObserver();
-//		mLogin.DoLogout();
+		mPresence.SetPresStatus(false, EPresStatus.E_PRES_SHOW_OFFLINE);
+		mPresence.RemovePresStatusObserver();
+		mLogin.RemoveXmppStateObserver();
+		mLogin.DoLogout();
 		super.onDestroy();
 	}
 	
@@ -102,7 +139,13 @@ public class ConnectActivity extends Activity implements Login.IXmppStateObserve
 		}
 		return true;
 	}
-
+	private static void abortUnless(boolean condition, String msg) 
+	{
+		if (!condition)
+		{
+			throw new RuntimeException(msg);
+		}
+	}
 	@Override
 	public void PresUpdate(final String strJid, final EPresStatus eShow, final String strStatus, final boolean bAvailable) {
 		Message msg = new Message();
@@ -120,29 +163,36 @@ public class ConnectActivity extends Activity implements Login.IXmppStateObserve
 	}
 	@Override
 	public void XmppStateChange(EXmppState newState) {
+		
+		Message msg = new Message();
+		Bundle bundle = new Bundle();
+		
 		switch (newState) 
-		{						
+		{			
 		case E_XMPP_STATE_START:
+			bundle.putInt("state", MESSAGE_E_XMPP_STATE_START);
 			break;
 			
 		case E_XMPP_STATE_OPENING:
+			bundle.putInt("state", MESSAGE_E_XMPP_STATE_OPENING);
 			break;
 
 		case E_XMPP_STATE_OPEN:
-			if (Constants.LOG_SWITCH)
-				Log.d(Constants.LOG_TAG, "XmppStateChange");
-    		mTvContent = (TextView) findViewById(R.id.tv_content);		
-			mTvContent.setText("等待好友上线...");
-            mPresence.AddPresStatusObserver(Observer);
-			mPresence.SetPresStatus(true, EPresStatus.E_PRES_SHOW_ONLINE);
+			bundle.putInt("state", MESSAGE_E_XMPP_STATE_OPEN);
 			break;
 			
 		case E_XMPP_STATE_CLOSED:
+			bundle.putInt("state", MESSAGE_E_XMPP_STATE_CLOSED);
 			break;
 
 		default:
 			break;
 		}
+		msg.setData(bundle);
+		msg.what = HANDLER_XAMPP_STATE_UPDATE;
+		mHandler.sendMessage(msg);
 		
+		if (Constants.LOG_SWITCH)
+			Log.d(Constants.LOG_TAG, (String) mTvContent.getText());
 	}
 }

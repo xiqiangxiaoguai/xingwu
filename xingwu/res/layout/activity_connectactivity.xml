@@ -6,14 +6,23 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".DisplayActivity" >
+    tools:context=".DisplayActivity" 
+    android:background="@color/bg_white">
 
+    <ImageView 
+        android:id="@+id/tv_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_launcher"
+        android:layout_above="@+id/tv_content"
+        android:layout_centerHorizontal="true"
+        />
     <TextView
         android:id="@+id/tv_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
         android:text="@string/welcome" 
-        android:textSize="36sp"/>
+        android:layout_centerInParent="true"
+        android:textSize="18sp"/>
 
 </RelativeLayout>
