@@ -334,12 +334,12 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 		BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inJustDecodeBounds = true; // 先获取原大小
 		scanBitmap = BitmapFactory.decodeFile(path, null);
-//		options.inJustDecodeBounds = false; // 获取新的大小
-//		int sampleSize = (int) (options.outHeight / (float) 200);
-//		if (sampleSize <= 0)
-//			sampleSize = 1;
-//		options.inSampleSize = sampleSize;
-//		scanBitmap = BitmapFactory.decodeFile(path, options);
+		options.inJustDecodeBounds = false; // 获取新的大小
+		int sampleSize = (int) (options.outHeight / (float) 200);
+		if (sampleSize <= 0)
+			sampleSize = 1;
+		options.inSampleSize = sampleSize;
+		scanBitmap = BitmapFactory.decodeFile(path, options);
 		
 		mhandler.sendEmptyMessage(0);
 		
@@ -352,14 +352,14 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 		    decodeFormats = new Vector<BarcodeFormat>();  
 		  
 		    // 这里设置可扫描的类型，我这里选择了都支持  
-		    decodeFormats.addAll(DecodeFormatManager.ONE_D_FORMATS);  
+//		    decodeFormats.addAll(DecodeFormatManager.ONE_D_FORMATS);  
 		    decodeFormats.addAll(DecodeFormatManager.QR_CODE_FORMATS);  
-		    decodeFormats.addAll(DecodeFormatManager.DATA_MATRIX_FORMATS);  
+//		    decodeFormats.addAll(DecodeFormatManager.DATA_MATRIX_FORMATS);  
 		}  
 		hints.put(DecodeHintType.POSSIBLE_FORMATS, decodeFormats);  
 		  
 		// 设置继续的字符编码格式为UTF8  
-		 hints.put(DecodeHintType.CHARACTER_SET, "UTF8"); 
+//		 hints.put(DecodeHintType.CHARACTER_SET, "UTF8"); 
 		
 //		HashMap<DecodeHintType, String> hints = new HashMap<DecodeHintType, String>();
 //		hints.put(DecodeHintType.CHARACTER_SET, "utf8");
