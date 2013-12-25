@@ -40,7 +40,6 @@
         </activity>
         <activity
             android:name="com.jiangzhouq.xingwu.LoginServerActivity"
-            android:label="@string/app_name"
             android:theme="@android:style/Theme.NoTitleBar" >
             <intent-filter>
                 <action android:name="android.intent.action.LoginServerActivity" />
@@ -68,7 +67,7 @@
         </activity>
         <activity
             android:name="com.jiangzhouq.xingwu.CaptureActivity"
-            android:label="@string/app_name"
+            android:label="@string/scan_qrcode"
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.CaptureActivity" />
@@ -78,7 +77,7 @@
         </activity>
         <activity
             android:name="com.jiangzhouq.xingwu.PwActivity"
-            android:label="@string/app_name"
+            android:label="@string/setting_pw_title"
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.PwActivity" />

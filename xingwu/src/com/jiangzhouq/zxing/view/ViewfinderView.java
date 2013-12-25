@@ -57,7 +57,6 @@ public final class ViewfinderView extends View {
   private int scannerAlpha;
   private List<ResultPoint> possibleResultPoints;
   private List<ResultPoint> lastPossibleResultPoints;
-  private int height_status = 0;
   // This constructor is used when the class is built from an XML resource.
   public ViewfinderView(Context context, AttributeSet attrs) {
     super(context, attrs);
@@ -72,26 +71,8 @@ public final class ViewfinderView extends View {
     scannerAlpha = 0;
     possibleResultPoints = new ArrayList<ResultPoint>(5);
     lastPossibleResultPoints = null;
-    height_status = getStatusBarHeight(context);
   }
   
-//获取手机状态栏高度
-  public static int getStatusBarHeight(Context context){
-      Class<?> c = null;
-      Object obj = null;
-      Field field = null;
-      int x = 0, statusBarHeight = 0;
-      try {
-          c = Class.forName("com.android.internal.R$dimen");
-          obj = c.newInstance();
-          field = c.getField("status_bar_height");
-          x = Integer.parseInt(field.get(obj).toString());
-          statusBarHeight = context.getResources().getDimensionPixelSize(x);
-      } catch (Exception e1) {
-          e1.printStackTrace();
-      } 
-      return statusBarHeight;
-  }
   
   public void setCameraManager(CameraManager cameraManager) {
     this.cameraManager = cameraManager;

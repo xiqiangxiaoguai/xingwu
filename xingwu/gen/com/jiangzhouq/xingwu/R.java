@@ -8,28 +8,34 @@
 package com.jiangzhouq.xingwu;
 
 public final class R {
+    public static final class anim {
+        public static final int umeng_fb_slide_in_from_left=0x7f040000;
+        public static final int umeng_fb_slide_in_from_right=0x7f040001;
+        public static final int umeng_fb_slide_out_from_left=0x7f040002;
+        public static final int umeng_fb_slide_out_from_right=0x7f040003;
+    }
     public static final class attr {
     }
     public static final class color {
-        public static final int bg_item_border=0x7f05000c;
-        public static final int bg_white=0x7f050000;
-        public static final int contents_text=0x7f050001;
-        public static final int encode_view=0x7f050002;
-        public static final int possible_result_points=0x7f050003;
+        public static final int bg_item_border=0x7f06000c;
+        public static final int bg_white=0x7f060000;
+        public static final int contents_text=0x7f060001;
+        public static final int encode_view=0x7f060002;
+        public static final int possible_result_points=0x7f060003;
         /**  Android standard ICS color 
          */
-        public static final int result_minor_text=0x7f050004;
-        public static final int result_points=0x7f050005;
+        public static final int result_minor_text=0x7f060004;
+        public static final int result_points=0x7f060005;
         /**  Android standard ICS color 
          */
-        public static final int result_text=0x7f050006;
-        public static final int result_view=0x7f050007;
-        public static final int status_text=0x7f050008;
-        public static final int transparent=0x7f050009;
-        public static final int viewfinder_laser=0x7f05000a;
+        public static final int result_text=0x7f060006;
+        public static final int result_view=0x7f060007;
+        public static final int status_text=0x7f060008;
+        public static final int transparent=0x7f060009;
+        public static final int viewfinder_laser=0x7f06000a;
         /**  Android standard ICS color 
          */
-        public static final int viewfinder_mask=0x7f05000b;
+        public static final int viewfinder_mask=0x7f06000b;
     }
     public static final class dimen {
         /**  Default screen margins, per the Android Design guidelines. 
@@ -38,83 +44,109 @@ public final class R {
          screen margins) for sw720dp devices (e.g. 10" tablets) in landscape here.
     
          */
-        public static final int activity_horizontal_margin=0x7f060000;
-        public static final int activity_vertical_margin=0x7f060001;
-        public static final int qrcode_size=0x7f060002;
+        public static final int activity_horizontal_margin=0x7f070000;
+        public static final int activity_vertical_margin=0x7f070001;
+        public static final int qrcode_size=0x7f070002;
     }
     public static final class drawable {
         public static final int bg_pw_item=0x7f020000;
-        public static final int bg_setting_item=0x7f020001;
-        public static final int ic_launcher=0x7f020002;
-        public static final int qrcode=0x7f020003;
-        public static final int umeng_common_gradient_green=0x7f020004;
-        public static final int umeng_common_gradient_orange=0x7f020005;
-        public static final int umeng_common_gradient_red=0x7f020006;
-        public static final int umeng_update_button_cancel_bg_focused=0x7f020007;
-        public static final int umeng_update_button_cancel_bg_normal=0x7f020008;
-        public static final int umeng_update_button_cancel_bg_selector=0x7f020009;
-        public static final int umeng_update_button_cancel_bg_tap=0x7f02000a;
-        public static final int umeng_update_button_close_bg_selector=0x7f02000b;
-        public static final int umeng_update_button_ok_bg_focused=0x7f02000c;
-        public static final int umeng_update_button_ok_bg_normal=0x7f02000d;
-        public static final int umeng_update_button_ok_bg_selector=0x7f02000e;
-        public static final int umeng_update_button_ok_bg_tap=0x7f02000f;
-        public static final int umeng_update_close_bg_normal=0x7f020010;
-        public static final int umeng_update_close_bg_tap=0x7f020011;
-        public static final int umeng_update_dialog_bg=0x7f020012;
-        public static final int umeng_update_title_bg=0x7f020013;
-        public static final int umeng_update_wifi_disable=0x7f020014;
+        public static final int bg_qr_scan=0x7f020001;
+        public static final int bg_setting_item=0x7f020002;
+        public static final int btn_login=0x7f020003;
+        public static final int common_button_big_green=0x7f020004;
+        public static final int common_button_big_green_highlighted=0x7f020005;
+        public static final int ic_launcher=0x7f020006;
+        public static final int icon_qrcode=0x7f020007;
+        public static final int icon_qrcode_highlighted=0x7f020008;
+        public static final int login_delete=0x7f020009;
+        public static final int login_input_background=0x7f02000a;
+        public static final int login_management_background=0x7f02000b;
+        public static final int login_management_background_highlighted=0x7f02000c;
+        public static final int login_management_signinbutton_background=0x7f02000d;
+        public static final int login_management_signinbutton_background_highlighted=0x7f02000e;
+        public static final int login_user=0x7f02000f;
+        public static final int login_user_hightlighted=0x7f020010;
+        public static final int login_wallpaper=0x7f020011;
+        public static final int qb_scan_album_button=0x7f020012;
+        public static final int qb_scan_bar=0x7f020013;
+        public static final int qb_scan_btn_flash_down=0x7f020014;
+        public static final int qb_scan_btn_flash_nor=0x7f020015;
+        public static final int qb_scan_btn_photo_down=0x7f020016;
+        public static final int qb_scan_btn_photo_nor=0x7f020017;
+        public static final int qb_scan_btn_scan_off=0x7f020018;
+        public static final int qb_scan_flash_button=0x7f020019;
+        public static final int qb_scan_flash_button_off=0x7f02001a;
+        public static final int src_qr_scan=0x7f02001b;
+        public static final int umeng_common_gradient_green=0x7f02001c;
+        public static final int umeng_common_gradient_orange=0x7f02001d;
+        public static final int umeng_common_gradient_red=0x7f02001e;
+        public static final int umeng_update_button_cancel_bg_focused=0x7f02001f;
+        public static final int umeng_update_button_cancel_bg_normal=0x7f020020;
+        public static final int umeng_update_button_cancel_bg_selector=0x7f020021;
+        public static final int umeng_update_button_cancel_bg_tap=0x7f020022;
+        public static final int umeng_update_button_close_bg_selector=0x7f020023;
+        public static final int umeng_update_button_ok_bg_focused=0x7f020024;
+        public static final int umeng_update_button_ok_bg_normal=0x7f020025;
+        public static final int umeng_update_button_ok_bg_selector=0x7f020026;
+        public static final int umeng_update_button_ok_bg_tap=0x7f020027;
+        public static final int umeng_update_close_bg_normal=0x7f020028;
+        public static final int umeng_update_close_bg_tap=0x7f020029;
+        public static final int umeng_update_dialog_bg=0x7f02002a;
+        public static final int umeng_update_title_bg=0x7f02002b;
+        public static final int umeng_update_wifi_disable=0x7f02002c;
     }
     public static final class id {
-        public static final int decode=0x7f070000;
-        public static final int decode_failed=0x7f070001;
-        public static final int decode_succeeded=0x7f070002;
-        public static final int del=0x7f070020;
-        public static final int eight=0x7f07001d;
-        public static final int five=0x7f07001a;
-        public static final int flash=0x7f07000c;
-        public static final int four=0x7f070019;
-        public static final int gallery=0x7f07000b;
-        public static final int launch_product_query=0x7f070003;
-        public static final int login=0x7f070011;
-        public static final int main=0x7f070007;
-        public static final int nine=0x7f07001e;
-        public static final int one=0x7f070016;
-        public static final int preview_view=0x7f070008;
-        public static final int pw=0x7f070021;
-        public static final int pw_cancel=0x7f070013;
-        public static final int pw_change=0x7f070012;
-        public static final int pw_items=0x7f070015;
-        public static final int qrcode_enter=0x7f07000f;
-        public static final int quit=0x7f070004;
-        public static final int restart_preview=0x7f070005;
-        public static final int return_scan_result=0x7f070006;
-        public static final int setting=0x7f070030;
-        public static final int seven=0x7f07001c;
-        public static final int six=0x7f07001b;
-        public static final int sn_editor=0x7f070010;
-        public static final int state=0x7f070014;
-        public static final int test=0x7f07000a;
-        public static final int three=0x7f070018;
-        public static final int tv_content=0x7f07000e;
-        public static final int tv_state=0x7f07000d;
-        public static final int two=0x7f070017;
-        public static final int umeng_common_notification=0x7f070027;
-        public static final int umeng_common_notification_controller=0x7f070024;
-        public static final int umeng_common_progress_bar=0x7f070029;
-        public static final int umeng_common_progress_text=0x7f070023;
-        public static final int umeng_common_rich_notification_cancel=0x7f070026;
-        public static final int umeng_common_rich_notification_continue=0x7f070025;
-        public static final int umeng_common_title=0x7f070028;
-        public static final int umeng_update_content=0x7f07002c;
-        public static final int umeng_update_id_cancel=0x7f07002e;
-        public static final int umeng_update_id_close=0x7f07002b;
-        public static final int umeng_update_id_ignore=0x7f07002f;
-        public static final int umeng_update_id_ok=0x7f07002d;
-        public static final int umeng_update_wifi_indicator=0x7f07002a;
-        public static final int update=0x7f070022;
-        public static final int viewfinder_view=0x7f070009;
-        public static final int zero=0x7f07001f;
+        public static final int content_del=0x7f080012;
+        public static final int decode=0x7f080000;
+        public static final int decode_failed=0x7f080001;
+        public static final int decode_succeeded=0x7f080002;
+        public static final int del=0x7f080022;
+        public static final int eight=0x7f08001f;
+        public static final int five=0x7f08001c;
+        public static final int flash=0x7f08000b;
+        public static final int four=0x7f08001b;
+        public static final int gallery=0x7f08000a;
+        public static final int launch_product_query=0x7f080003;
+        public static final int layout_sn_editor=0x7f08000f;
+        public static final int login=0x7f080013;
+        public static final int main=0x7f080007;
+        public static final int nine=0x7f080020;
+        public static final int one=0x7f080018;
+        public static final int preview_view=0x7f080008;
+        public static final int pw=0x7f080023;
+        public static final int pw_cancel=0x7f080015;
+        public static final int pw_change=0x7f080014;
+        public static final int pw_items=0x7f080017;
+        public static final int qrcode_enter=0x7f08000e;
+        public static final int quit=0x7f080004;
+        public static final int restart_preview=0x7f080005;
+        public static final int return_scan_result=0x7f080006;
+        public static final int setting=0x7f080032;
+        public static final int seven=0x7f08001e;
+        public static final int six=0x7f08001d;
+        public static final int sn_editor=0x7f080011;
+        public static final int state=0x7f080016;
+        public static final int three=0x7f08001a;
+        public static final int tv_content=0x7f08000d;
+        public static final int tv_state=0x7f08000c;
+        public static final int two=0x7f080019;
+        public static final int umeng_common_notification=0x7f080029;
+        public static final int umeng_common_notification_controller=0x7f080026;
+        public static final int umeng_common_progress_bar=0x7f08002b;
+        public static final int umeng_common_progress_text=0x7f080025;
+        public static final int umeng_common_rich_notification_cancel=0x7f080028;
+        public static final int umeng_common_rich_notification_continue=0x7f080027;
+        public static final int umeng_common_title=0x7f08002a;
+        public static final int umeng_update_content=0x7f08002e;
+        public static final int umeng_update_id_cancel=0x7f080030;
+        public static final int umeng_update_id_close=0x7f08002d;
+        public static final int umeng_update_id_ignore=0x7f080031;
+        public static final int umeng_update_id_ok=0x7f08002f;
+        public static final int umeng_update_wifi_indicator=0x7f08002c;
+        public static final int update=0x7f080024;
+        public static final int user_state=0x7f080010;
+        public static final int viewfinder_view=0x7f080009;
+        public static final int zero=0x7f080021;
     }
     public static final class layout {
         public static final int activity_captureactivity=0x7f030000;
@@ -128,57 +160,57 @@ public final class R {
         public static final int umeng_update_dialog=0x7f030008;
     }
     public static final class menu {
-        public static final int menu_connectactivity=0x7f0a0000;
+        public static final int menu_connectactivity=0x7f0b0000;
     }
     public static final class raw {
-        public static final int beep=0x7f040000;
+        public static final int beep=0x7f050000;
     }
     public static final class string {
-        public static final int UMAppUpdate=0x7f080028;
-        public static final int UMBreak_Network=0x7f080020;
-        public static final int UMDialog_InstallAPK=0x7f08002c;
-        public static final int UMGprsCondition=0x7f080026;
-        public static final int UMIgnore=0x7f08002a;
-        public static final int UMNewVersion=0x7f080022;
-        public static final int UMNotNow=0x7f080029;
-        public static final int UMTargetSize=0x7f080025;
-        public static final int UMToast_IsUpdating=0x7f08002b;
-        public static final int UMUpdateContent=0x7f080023;
-        public static final int UMUpdateNow=0x7f080027;
-        public static final int UMUpdateSize=0x7f080024;
-        public static final int UMUpdateTitle=0x7f080021;
-        public static final int app_name=0x7f080000;
-        public static final int cancel=0x7f080005;
-        public static final int flash=0x7f080013;
-        public static final int gallery=0x7f080012;
-        public static final int login=0x7f080003;
-        public static final int ok=0x7f080004;
-        public static final int pw_cancel=0x7f080009;
-        public static final int pw_change=0x7f08000a;
-        public static final int pw_create=0x7f08000b;
-        public static final int pw_first=0x7f08000c;
-        public static final int pw_first_confirm=0x7f08000d;
-        public static final int pw_new=0x7f08000f;
-        public static final int pw_new_confirm=0x7f080010;
-        public static final int pw_old=0x7f08000e;
-        public static final int scan_qrcode=0x7f080002;
-        public static final int setting=0x7f080007;
-        public static final int setting_pw_title=0x7f080008;
-        public static final int setting_update_title=0x7f080011;
-        public static final int sn_editor_display=0x7f080006;
-        public static final int umeng_common_action_cancel=0x7f080018;
-        public static final int umeng_common_action_continue=0x7f080017;
-        public static final int umeng_common_action_info_exist=0x7f080014;
-        public static final int umeng_common_action_pause=0x7f080016;
-        public static final int umeng_common_download_failed=0x7f08001d;
-        public static final int umeng_common_download_finish=0x7f08001e;
-        public static final int umeng_common_download_notification_prefix=0x7f080019;
-        public static final int umeng_common_info_interrupt=0x7f080015;
-        public static final int umeng_common_network_break_alert=0x7f08001c;
-        public static final int umeng_common_patch_finish=0x7f08001f;
-        public static final int umeng_common_start_download_notification=0x7f08001a;
-        public static final int umeng_common_start_patch_notification=0x7f08001b;
-        public static final int welcome=0x7f080001;
+        public static final int UMAppUpdate=0x7f090028;
+        public static final int UMBreak_Network=0x7f090020;
+        public static final int UMDialog_InstallAPK=0x7f09002c;
+        public static final int UMGprsCondition=0x7f090026;
+        public static final int UMIgnore=0x7f09002a;
+        public static final int UMNewVersion=0x7f090022;
+        public static final int UMNotNow=0x7f090029;
+        public static final int UMTargetSize=0x7f090025;
+        public static final int UMToast_IsUpdating=0x7f09002b;
+        public static final int UMUpdateContent=0x7f090023;
+        public static final int UMUpdateNow=0x7f090027;
+        public static final int UMUpdateSize=0x7f090024;
+        public static final int UMUpdateTitle=0x7f090021;
+        public static final int app_name=0x7f090000;
+        public static final int cancel=0x7f090005;
+        public static final int flash=0x7f090013;
+        public static final int gallery=0x7f090012;
+        public static final int login=0x7f090003;
+        public static final int ok=0x7f090004;
+        public static final int pw_cancel=0x7f090009;
+        public static final int pw_change=0x7f09000a;
+        public static final int pw_create=0x7f09000b;
+        public static final int pw_first=0x7f09000c;
+        public static final int pw_first_confirm=0x7f09000d;
+        public static final int pw_new=0x7f09000f;
+        public static final int pw_new_confirm=0x7f090010;
+        public static final int pw_old=0x7f09000e;
+        public static final int scan_qrcode=0x7f090002;
+        public static final int setting=0x7f090007;
+        public static final int setting_pw_title=0x7f090008;
+        public static final int setting_update_title=0x7f090011;
+        public static final int sn_editor_display=0x7f090006;
+        public static final int umeng_common_action_cancel=0x7f090018;
+        public static final int umeng_common_action_continue=0x7f090017;
+        public static final int umeng_common_action_info_exist=0x7f090014;
+        public static final int umeng_common_action_pause=0x7f090016;
+        public static final int umeng_common_download_failed=0x7f09001d;
+        public static final int umeng_common_download_finish=0x7f09001e;
+        public static final int umeng_common_download_notification_prefix=0x7f090019;
+        public static final int umeng_common_info_interrupt=0x7f090015;
+        public static final int umeng_common_network_break_alert=0x7f09001c;
+        public static final int umeng_common_patch_finish=0x7f09001f;
+        public static final int umeng_common_start_download_notification=0x7f09001a;
+        public static final int umeng_common_start_patch_notification=0x7f09001b;
+        public static final int welcome=0x7f090001;
     }
     public static final class style {
         /** 
@@ -202,10 +234,10 @@ public final class R {
     
  API 14 theme customizations can go here. 
          */
-        public static final int AppBaseTheme=0x7f090000;
+        public static final int AppBaseTheme=0x7f0a0000;
         /**  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
          */
-        public static final int AppTheme=0x7f090001;
+        public static final int AppTheme=0x7f0a0001;
     }
 }

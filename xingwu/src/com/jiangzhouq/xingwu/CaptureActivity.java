@@ -1,16 +1,19 @@
 package com.jiangzhouq.xingwu;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Vector;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
 import android.hardware.Camera.Size;
 import android.os.Bundle;
@@ -18,6 +21,7 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -27,6 +31,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
@@ -56,6 +61,8 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 	private Map<DecodeHintType, ?> decodeHints;
 	private boolean flash_state = false;
 	private final int REQUEST_CODE_CHOOSER = 0;
+	SurfaceHolder surfaceHolder ;
+	TextView btn_flash;
 	public ViewfinderView getViewfinderView() {
 		return viewfinderView;
 	}
@@ -67,20 +74,12 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 	public CameraManager getCameraManager() {
 		return cameraManager;
 	}
-	Handler mhandler = new Handler(){
-		public void handleMessage(android.os.Message msg) {
-			switch (msg.what){
-			case 0:
-				ImageView image = (ImageView) findViewById(R.id.test);
-				image.setImageBitmap(scanBitmap);
-				break;
-			}
-		};
-	};
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		if (Constants.LOG_SWITCH)
+			Log.d(Constants.LOG_TAG, "data2:" + new SimpleDateFormat("ss").format(System.currentTimeMillis()));
 		Window window = getWindow();
 		window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		setContentView(R.layout.activity_captureactivity);
@@ -89,10 +88,13 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 		beepManager = new BeepManager(this);
 		ambientLightManager = new AmbientLightManager(this);
 		
-		Button btn_gallery = (Button) findViewById(R.id.gallery);
+		TextView btn_gallery = (TextView) findViewById(R.id.gallery);
 		btn_gallery.setOnClickListener(this);
-		Button btn_flash = (Button) findViewById(R.id.flash);
+		btn_flash = (TextView) findViewById(R.id.flash);
 		btn_flash.setOnClickListener(this);
+
+		ActionBar action = getActionBar();
+		action.setDisplayHomeAsUpEnabled(true);
 	}
 
 	@Override
@@ -101,11 +103,9 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 		cameraManager = new CameraManager(getApplication());
 		viewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_view);
 		viewfinderView.setCameraManager(cameraManager);
-
 		handler = null;
 		SurfaceView surfaceView = (SurfaceView) findViewById(R.id.preview_view);
-		SurfaceHolder surfaceHolder = surfaceView.getHolder();
-		
+		surfaceHolder = surfaceView.getHolder();
 		if (hasSurface) {
 			// The activity was paused but not stopped, so the surface still
 			// exists. Therefore
@@ -114,16 +114,23 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 		} else {
 			// Install the callback and wait for surfaceCreated() to init the
 			// camera.
-			surfaceHolder.addCallback(this);
+			surfaceHolder.addCallback(CaptureActivity.this);
 		}
 		beepManager.updatePrefs();
 		ambientLightManager.start(cameraManager);
 		decodeFormats = null;
 		characterSet = null;
+		if (Constants.LOG_SWITCH)
+			Log.d(Constants.LOG_TAG, "data1:" + new SimpleDateFormat("ss").format(System.currentTimeMillis()));
 	}
 
 	@Override
 	protected void onPause() {
+		if(flash_state){
+			ambientLightManager.setTorch(false);
+			flash_state = false;
+		}
+		
 		if (handler != null) {
 			handler.quitSynchronously();
 			handler = null;
@@ -135,13 +142,19 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 			SurfaceHolder surfaceHolder = surfaceView.getHolder();
 			surfaceHolder.removeCallback(this);
 		}
-		if(flash_state){
-			ambientLightManager.setTorch(false);
-			flash_state = false;
-		}
+		
 		super.onPause();
 	}
 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch(item.getItemId()){
+		case android.R.id.home:
+			finish();
+			break;
+		}
+		return super.onOptionsItemSelected(item);
+	}
 	private void initCamera(SurfaceHolder surfaceHolder) {
 		if (surfaceHolder == null) {
 			throw new IllegalStateException("No SurfaceHolder provided");
@@ -266,9 +279,16 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 			if(flash_state){
 				ambientLightManager.setTorch(false);
 				flash_state = false;
+				Drawable drawable = getResources().getDrawable(R.drawable.qb_scan_flash_button);
+				drawable.setBounds(btn_flash.getCompoundDrawables()[1].copyBounds());
+				btn_flash.setCompoundDrawables(null, drawable, null, null);
+				
 			}else{
 				ambientLightManager.setTorch(true);
 				flash_state = true;
+				Drawable drawable = getResources().getDrawable(R.drawable.qb_scan_flash_button_off);
+				drawable.setBounds(btn_flash.getCompoundDrawables()[1].copyBounds());
+				btn_flash.setCompoundDrawables(null, drawable, null, null);
 			}
 			break;
 		}
@@ -341,7 +361,6 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 		options.inSampleSize = sampleSize;
 		scanBitmap = BitmapFactory.decodeFile(path, options);
 		
-		mhandler.sendEmptyMessage(0);
 		
 		// 解码的参数  
 		Hashtable<DecodeHintType, Object> hints = new Hashtable<DecodeHintType, Object>(  
