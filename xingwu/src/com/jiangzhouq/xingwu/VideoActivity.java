@@ -13,11 +13,14 @@ import android.content.Intent;
 import android.graphics.Point;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 
 public class VideoActivity extends Activity implements IPeerConnObserver{
 	private VideoStreamsView     mVsv;
 	private final PeerConn       mPeerConn   = new PeerConn();
 	private String strJid;
+	Handler mHandler = new Handler(){};
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -45,6 +48,13 @@ public class VideoActivity extends Activity implements IPeerConnObserver{
             AudioManager.MODE_IN_CALL : AudioManager.MODE_IN_COMMUNICATION);
         audioManager.setSpeakerphoneOn(!isWiredHeadsetOn);
         mPeerConn.AddPeerConnMsgObserver(this);
+        mHandler.postDelayed(new Runnable() {
+			
+			@Override
+			public void run() {
+				mPeerConn.SendPeerConnInvite(strJid, EPeerConnType.E_PEERCONN_VV_FDX);
+			}
+		}, 2000);
 	}
 	@Override
 	protected void onDestroy() {
@@ -64,6 +74,8 @@ public class VideoActivity extends Activity implements IPeerConnObserver{
 	@Override
 	public void RecvPeerConnAccept(final String strFrom, final EPeerConnType eType) {
 		// TODO Auto-generated method stub
+		if (Constants.LOG_SWITCH)
+			Log.d(Constants.LOG_TAG, "video RecvPeerConnAccept");
 		runOnUiThread(new Runnable()
 	    {
 	        public void run() 
@@ -75,10 +87,14 @@ public class VideoActivity extends Activity implements IPeerConnObserver{
 //	        		IceServer server = new IceServer("turn:120.236.21.179:3478", "3dinlife", "passwd");
 	        		List<IceServer> servers = new LinkedList<IceServer>();
 	        		servers.add(server);
+	        		if (Constants.LOG_SWITCH)
+						Log.d(Constants.LOG_TAG, "server ready" + " strFrom:" + strFrom);
 //	        		mPeerConn.Start(EPeerConnType.E_PEERCONN_VOICE_FDX, strFrom, servers, true);
 	        		mPeerConn.Start(EPeerConnType.E_PEERCONN_VV_FDX, strFrom, servers,
 	        				new VideoRenderer(mVsv, VideoStreamsView.Endpoint.LOCAL), 
 	        				new VideoRenderer(mVsv, VideoStreamsView.Endpoint.REMOTE), true);
+	        		if (Constants.LOG_SWITCH)
+						Log.d(Constants.LOG_TAG, "VV_Start");
 	        	}
 	        }
 	    });		
@@ -112,6 +128,8 @@ public class VideoActivity extends Activity implements IPeerConnObserver{
 	@Override
 	public void RecvPeerConnInvite(final String strFrom, final EPeerConnType eType) {
 		// TODO Auto-generated method stub
+		if (Constants.LOG_SWITCH)
+			Log.d(Constants.LOG_TAG, "video RecvPeerConnInvite");
 		runOnUiThread(new Runnable()
 	    {
 	        public void run() 

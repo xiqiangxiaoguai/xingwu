@@ -92,7 +92,9 @@ public class AudioActivity extends Activity implements PeerConn.IPeerConnObserve
 	void handleConnect(Message msg, boolean isPost){
 		Bundle bundle = msg.getData();
 		String strFrom = bundle.getString("strFrom");
-		mPeerConn.SendPeerConnAccept(strFrom, EPeerConnType.E_PEERCONN_VOICE_FDX);
+		if(!isPost){
+			mPeerConn.SendPeerConnAccept(strFrom, EPeerConnType.E_PEERCONN_VOICE_FDX);
+		}
 		IceServer server = new IceServer("stun:120.236.21.179:19302");
 		
 		List<IceServer> servers = new LinkedList<IceServer>();
@@ -168,17 +170,15 @@ public class AudioActivity extends Activity implements PeerConn.IPeerConnObserve
 
 	@Override
 	public void RecvPeerConnAccept(final String strFrom, final EPeerConnType eType) {
-		
-		runOnUiThread(new Runnable()
-	    {
-	        public void run() 
-	        {
-	        	if (eType == EPeerConnType.E_PEERCONN_VOICE_FDX)
-	        	{		
-	        		
-	        	}
-	        }
-	    });		
+    	if (eType == EPeerConnType.E_PEERCONN_VOICE_FDX)
+    	{		
+    		Message msg = new Message();
+    		Bundle bundle = new Bundle();
+    		bundle.putString("strFrom", strFrom);
+    		msg.setData(bundle);
+    		msg.what = HANDLER_MSG_ACCEPT;
+    		mHandler.sendMessage(msg);
+    	}
 	}
 
 	@Override
