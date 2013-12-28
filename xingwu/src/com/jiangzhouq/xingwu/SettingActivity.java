@@ -28,6 +28,8 @@ public class SettingActivity extends Activity implements OnClickListener{
 		pw_layout.setOnClickListener(this);
 		RelativeLayout update_layout  = (RelativeLayout) findViewById(R.id.update);
 		update_layout.setOnClickListener(this);
+		RelativeLayout reset_layout  = (RelativeLayout) findViewById(R.id.reset);
+		reset_layout.setOnClickListener(this);
 	}
 	
 	@Override
@@ -61,7 +63,10 @@ public class SettingActivity extends Activity implements OnClickListener{
 		                break;
 		            }
 		        }
-		});
+			});
+			break;
+		case R.id.reset:
+			startActivity(new Intent(this, LoginServerActivity.class));
 			break;
 		}
 	}

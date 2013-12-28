@@ -16,7 +16,21 @@
         android:layout_height="fill_parent"
         android:background="@android:color/transparent" />
 
-   <LinearLayout
+    <TextView
+        android:id="@+id/status_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:paddingBottom="15.0dip"
+        android:layout_above="@+id/qr_tools"
+        android:background="#00000030"
+        android:gravity="center"
+        android:text="@string/scan_qrcode_text"
+        android:textColor="#ffffffff"
+        android:textSize="15.0sp" />
+    
+	<LinearLayout
+	    android:id="@+id/qr_tools"
        android:layout_width="fill_parent"
        android:layout_height="110.0dip"
        android:layout_alignParentBottom="true"

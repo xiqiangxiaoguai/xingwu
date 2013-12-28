@@ -208,12 +208,12 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 		if (fromLiveScan) {
 			beepManager.playBeepSoundAndVibrate();
 		}
-//		if (Constants.LOG_SWITCH)
-//			Log.d(Constants.LOG_TAG, "test image size:" + barcode.getWidth() + "*" + barcode.getHeight());
-//		Intent intent = new Intent();
-//		intent.putExtra(Constants.BUNDLE_KEY_SN, rawResult.getText());
-//		CaptureActivity.this.setResult(RESULT_OK, intent);
-//		CaptureActivity.this.finish();
+		if (Constants.LOG_SWITCH)
+			Log.d(Constants.LOG_TAG, "test image size:" + barcode.getWidth() + "*" + barcode.getHeight());
+		Intent intent = new Intent();
+		intent.putExtra(Constants.BUNDLE_KEY_SN, rawResult.getText());
+		CaptureActivity.this.setResult(RESULT_OK, intent);
+		CaptureActivity.this.finish();
 	}
 
 	@Override

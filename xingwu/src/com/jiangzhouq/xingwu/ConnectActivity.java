@@ -1,6 +1,5 @@
 package com.jiangzhouq.xingwu;
 
-import java.io.Serializable;
 import java.util.LinkedList;
 
 import tvb.boxclient.Login;
@@ -10,6 +9,7 @@ import tvb.boxclient.Presence;
 import tvb.boxclient.Presence.EPresStatus;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -19,9 +19,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class ConnectActivity extends Activity implements Login.IXmppStateObserver, Presence.IPresenceStatusObserver{
+public class ConnectActivity extends Activity implements Login.IXmppStateObserver, Presence.IPresenceStatusObserver, OnClickListener{
 	
 	private final int HANDLER_PRESENCE_UPDATE = 0;
 	private final int HANDLER_XAMPP_STATE_UPDATE = 1;
@@ -52,15 +53,19 @@ public class ConnectActivity extends Activity implements Login.IXmppStateObserve
 					}
 					if (bAvailable)
 		    		{
-		    			String strContent = "在线好友：" + strJid;
+//		    			String strContent = "在线好友：" + strJid;
+		    			String strContent = "连接成功";
 		    			mTvContent.setText(strContent);
 		    			mRoster.add(strJid);
+		    			updateUI(true);
 		    		}
 		    		else
 		    		{
-		    			String strContent = "好友下线：" + strJid;
+//		    			String strContent = "好友下线：" + strJid;
+		    			String strContent = "等待好友上线...";
 		    			mRoster.remove(strJid);
 		    			mTvContent.setText(strContent);
+		    			updateUI(false);
 		    		}
 					break;
 				case HANDLER_XAMPP_STATE_UPDATE:
@@ -81,6 +86,7 @@ public class ConnectActivity extends Activity implements Login.IXmppStateObserve
 						mTvContent.setText("关闭...");
 						break;
 					}
+					updateUI(false);
 					break;
 			}
 			if (Constants.LOG_SWITCH)
@@ -92,7 +98,6 @@ public class ConnectActivity extends Activity implements Login.IXmppStateObserve
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_connectactivity);
-		
 		Intent intent = getIntent();
 		Bundle bundle = intent.getExtras();
 		final String sn = bundle.getString(Constants.BUNDLE_KEY_SN);
@@ -102,19 +107,39 @@ public class ConnectActivity extends Activity implements Login.IXmppStateObserve
 				Log.d(Constants.LOG_TAG, "sn ConnectActivity received is empty or null!");
 			return;
 		}
-		mTvContent.setText(sn);
-		ImageView image = (ImageView) findViewById(R.id.tv_state);
-		image.setOnClickListener(new OnClickListener() {
+//		mTvContent.setText(sn);
+//		ImageView image = (ImageView) findViewById(R.id.tv_state);
+//		image.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+		mHandler.postDelayed(new Runnable() {
 			@Override
-			public void onClick(View v) {
-				mLogin = new Login(sn, sn, Constants.TVB_LOGIN_SERVER_IP, Constants.TVB_LOGIN_TAG);
+			public void run() {
+				mLogin = new Login(sn, "123456", Constants.TVB_LOGIN_SERVER_IP, Constants.TVB_LOGIN_TAG);
 				mLogin.AddXmppStateObserver(Observer);
 				abortUnless(PeerConn.InitAndroidGlobals(this), "Failed to initializeAndroidGlobals");
 				mLogin.DoLogin();
 			}
-		});
+		}, 2000);
+		
+				
+				
+//			}
+//		});
+		LinearLayout videoBtn = (LinearLayout) findViewById(R.id.video);
+		videoBtn.setOnClickListener(this);
+		LinearLayout audioBtn = (LinearLayout) findViewById(R.id.audio);
+		audioBtn.setOnClickListener(this);
+		updateUI(false);
+	} 
+	@Override
+	public void onWindowFocusChanged(boolean hasFocus) {
+		// TODO Auto-generated method stub
+		super.onWindowFocusChanged(hasFocus);
+		ImageView image = (ImageView) findViewById(R.id.tv_state);
+		AnimationDrawable anim = (AnimationDrawable) image.getDrawable();
+		anim.start();
 	}
-	
 	@Override
 	protected void onDestroy() {
 		mPresence.SetPresStatus(false, EPresStatus.E_PRES_SHOW_OFFLINE);
@@ -139,6 +164,26 @@ public class ConnectActivity extends Activity implements Login.IXmppStateObserve
 		}
 		return true;
 	}
+	void updateUI( boolean enable){
+		LinearLayout videoBtn = (LinearLayout) findViewById(R.id.video);
+		LinearLayout audioBtn = (LinearLayout) findViewById(R.id.audio);
+		videoBtn.setClickable(enable);
+		audioBtn.setClickable(enable);
+		ImageView image = (ImageView) findViewById(R.id.tv_state);
+		if(!enable){
+			audioBtn.setBackgroundResource(R.drawable.bg_btn_video_disable);
+			videoBtn.setBackgroundResource(R.drawable.bg_btn_video_disable);
+			image.setBackgroundResource(R.drawable.logo_server);
+			image.setImageAlpha(255);
+		}else{
+			audioBtn.setBackgroundResource(R.drawable.bg_btn_video);
+			videoBtn.setBackgroundResource(R.drawable.bg_btn_video);
+			image.setBackgroundResource(R.drawable.logo_server_highlight);
+			image.setImageAlpha(0);
+		}
+		
+		
+	}
 	private static void abortUnless(boolean condition, String msg) 
 	{
 		if (!condition)
@@ -162,8 +207,8 @@ public class ConnectActivity extends Activity implements Login.IXmppStateObserve
 		mHandler.sendMessage(msg);
 	}
 	@Override
-	public void XmppStateChange(EXmppState newState) {
-		
+	public void XmppStateChange(final EXmppState newState) {
+		 
 		Message msg = new Message();
 		Bundle bundle = new Bundle();
 		
@@ -194,5 +239,27 @@ public class ConnectActivity extends Activity implements Login.IXmppStateObserve
 		
 		if (Constants.LOG_SWITCH)
 			Log.d(Constants.LOG_TAG, (String) mTvContent.getText());
+	}
+
+	@Override
+	public void onClick(View v) {
+		Intent intent ;
+		Bundle bundle;
+		switch(v.getId()){
+		case R.id.video:
+			intent  = new Intent(this, VideoActivity.class);
+			bundle = new Bundle();
+			bundle.putString("strJid", mRoster.getFirst());
+			intent.putExtras(bundle);
+			startActivity(intent);
+			break;
+		case R.id.audio:
+			intent  = new Intent(this, AudioActivity.class);
+			bundle = new Bundle();
+			bundle.putString("strJid", mRoster.getFirst());
+			intent.putExtras(bundle);
+			startActivity(intent);
+			break;
+		}
 	}
 }

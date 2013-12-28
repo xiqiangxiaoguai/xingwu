@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>  
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"  
+    android:oneshot="false">  
+    <item android:drawable="@drawable/voicesearch_loading001" android:duration="100"/>  
+    <item android:drawable="@drawable/voicesearch_loading002" android:duration="100"/>  
+    <item android:drawable="@drawable/voicesearch_loading003" android:duration="100"/>  
+    <item android:drawable="@drawable/voicesearch_loading004" android:duration="100"/>  
+    <item android:drawable="@drawable/voicesearch_loading005" android:duration="100"/>  
+    <item android:drawable="@drawable/voicesearch_loading006" android:duration="100"/> 
+    <item android:drawable="@drawable/voicesearch_loading007" android:duration="100"/>  
+    <item android:drawable="@drawable/voicesearch_loading008" android:duration="100"/>  
+    <item android:drawable="@drawable/voicesearch_loading009" android:duration="100"/>  
+    <item android:drawable="@drawable/voicesearch_loading010" android:duration="100"/> 
+</animation-list>  

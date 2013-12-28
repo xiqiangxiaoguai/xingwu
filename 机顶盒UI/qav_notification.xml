@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list android:oneshot="false"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:duration="300" android:drawable="@drawable/qav_notify_1" />
+    <item android:duration="600" android:drawable="@drawable/qav_notify_2" />
+    <item android:duration="1000" android:drawable="@drawable/qav_notify_1" />
+    <item android:duration="100" android:drawable="@drawable/qav_notify_3" />
+    <item android:duration="90" android:drawable="@drawable/qav_notify_4" />
+    <item android:duration="80" android:drawable="@drawable/qav_notify_5" />
+    <item android:duration="70" android:drawable="@drawable/qav_notify_6" />
+    <item android:duration="60" android:drawable="@drawable/qav_notify_7" />
+    <item android:duration="50" android:drawable="@drawable/qav_notify_8" />
+    <item android:duration="60" android:drawable="@drawable/qav_notify_7" />
+    <item android:duration="70" android:drawable="@drawable/qav_notify_6" />
+    <item android:duration="80" android:drawable="@drawable/qav_notify_5" />
+    <item android:duration="90" android:drawable="@drawable/qav_notify_4" />
+    <item android:duration="100" android:drawable="@drawable/qav_notify_3" />
+    <item android:duration="300" android:drawable="@drawable/qav_notify_1" />
+    <item android:duration="600" android:drawable="@drawable/qav_notify_2" />
+</animation-list>

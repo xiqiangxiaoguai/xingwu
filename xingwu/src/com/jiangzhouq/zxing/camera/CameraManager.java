@@ -40,10 +40,10 @@ public final class CameraManager {
 
   private static final String TAG = CameraManager.class.getSimpleName();
 
-  private static final int MIN_FRAME_WIDTH = 240;
-  private static final int MIN_FRAME_HEIGHT = 240;
-  private static final int MAX_FRAME_WIDTH = 1200; // = 5/8 * 1920
-  private static final int MAX_FRAME_HEIGHT = 675; // = 5/8 * 1080
+  private static final int MIN_FRAME_WIDTH = 360;
+  private static final int MIN_FRAME_HEIGHT = 360;
+  private static final int MAX_FRAME_WIDTH = 1440; // = 5/8 * 1920
+  private static final int MAX_FRAME_HEIGHT = 810; // = 5/8 * 1080
 
   private final Context context;
   private final CameraConfigurationManager configManager;
@@ -237,7 +237,7 @@ public final class CameraManager {
     return framingRect;
   }
   private static int findDesiredDimensionInRange(int resolution, int hardMin, int hardMax) {
-    int dim = 5 * resolution / 8; // Target 5/8 of each dimension
+    int dim = 3 * resolution / 5; // Target 5/8 of each dimension
     if (dim < hardMin) {
       return hardMin;
     }
@@ -295,7 +295,7 @@ public final class CameraManager {
         width = screenResolution.x;
       }
       if (height > screenResolution.y) {
-        height = screenResolution.y;
+        height = width;
       }
       int leftOffset = (screenResolution.x - width) / 2;
       int topOffset = (screenResolution.y - height) / 2;
