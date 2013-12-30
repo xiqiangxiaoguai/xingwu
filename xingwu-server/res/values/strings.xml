@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">E家通</string>
+    <string name="welcome">您好!</string>
+    <string name="scan_qrcode">扫描二维码</string>
+    <string name="login">登录</string>
+    <string name="ok">确认</string>
+    <string name="cancel">取消</string>
+    <string name="sn_editor_display">请输入序列号</string>
+    <string name="setting">设置</string>
+    <string name="setting_pw_title">密码管理</string>
+    <string name="pw_cancel">关闭密码</string>
+    <string name="pw_change">修改密码</string>
+    <string name="pw_create">创建密码</string>
+    <string name="pw_first">请输入密码</string>
+    <string name="pw_first_confirm">请再次输入密码</string>
+    <string name="pw_old">请输入旧密码</string>
+    <string name="pw_new">请输入新密码</string>
+    <string name="pw_new_confirm">请再次输入新密码</string>
+    <string name="setting_update_title">在线更新</string>
+    <string name="setting_reset_title">解除绑定</string>
+    <string name="gallery">相册</string>
+    <string name="flash">开灯</string>
+    <string name="scan_qrcode_text">将取景框对准二维码，\n 即可自动扫描。</string>
+    <string name="video">视频呼叫</string>
+    <string name="audio">语音呼叫</string>
+    <string name="hangup">挂断</string>
+    <string name="connecting">正在连接中,请稍候...</string>
+</resources>

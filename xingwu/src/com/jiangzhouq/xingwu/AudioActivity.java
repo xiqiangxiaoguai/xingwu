@@ -15,6 +15,7 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
@@ -89,21 +90,33 @@ public class AudioActivity extends Activity implements PeerConn.IPeerConnObserve
 			timeCount.setText(String.format("%1$02d:%2$02d:%3$02d",0, 0, 0));
 		}
 	}
-	void handleConnect(Message msg, boolean isPost){
+	void handleConnect(Message msg, final boolean isPost){
 		Bundle bundle = msg.getData();
-		String strFrom = bundle.getString("strFrom");
-		if(!isPost){
-			mPeerConn.SendPeerConnAccept(strFrom, EPeerConnType.E_PEERCONN_VOICE_FDX);
-		}
-		IceServer server = new IceServer("stun:120.236.21.179:19302");
+		final String strFrom = bundle.getString("strFrom");
 		
-		List<IceServer> servers = new LinkedList<IceServer>();
-		servers.add(server);
-		if(isPost){
-			mPeerConn.Start(EPeerConnType.E_PEERCONN_VOICE_FDX, strFrom, servers, true);
-		}else{
-			mPeerConn.Start(EPeerConnType.E_PEERCONN_VOICE_FDX, strFrom, servers, false);
-		}
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				if(!isPost){
+					mPeerConn.SendPeerConnAccept(strFrom, EPeerConnType.E_PEERCONN_VOICE_FDX);
+				}
+				IceServer server = new IceServer("stun:"+ Constants.TVB_LOGIN_SERVER_IP +":19302");
+				
+				List<IceServer> servers = new LinkedList<IceServer>();
+				servers.add(server);
+				if (Constants.LOG_SWITCH)
+					Log.d(Constants.LOG_TAG, "start to start audio:" + isPost);
+				if(isPost){
+					mPeerConn.Start(EPeerConnType.E_PEERCONN_VOICE_FDX, strFrom, servers, true);
+				}else{
+					mPeerConn.Start(EPeerConnType.E_PEERCONN_VOICE_FDX, strFrom, servers, false);
+				}
+			}
+		}).start();
+		
+		if (Constants.LOG_SWITCH)
+			Log.d(Constants.LOG_TAG, "successfully started audio:" + isPost);
 		ImageView audioLoading = (ImageView) findViewById(R.id.audio_state);
 		audioLoading.setBackgroundResource(R.drawable.voicesearch_loading006);
 		
@@ -143,6 +156,7 @@ public class AudioActivity extends Activity implements PeerConn.IPeerConnObserve
 				: AudioManager.MODE_IN_COMMUNICATION);
 		audioManager.setSpeakerphoneOn(!isWiredHeadsetOn);
 		mPeerConn.AddPeerConnMsgObserver(AudioActivity.this);
+		
 		
 		LinearLayout hangupBtn = (LinearLayout) findViewById(R.id.hangup);
 		hangupBtn.setOnClickListener(this);

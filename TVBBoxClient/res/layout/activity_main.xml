@@ -6,12 +6,25 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".MainActivity" >
+    android:id="@+id/maina"
+    android:background="@drawable/bg_connect">
 
+    <ImageView
+        android:id="@+id/image1"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/server_loading"
+        android:scaleType="center"
+       />
+    
     <TextView
-        android:id="@+id/tv_content"
+        android:id="@+id/text1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
-
+        android:layout_below="@+id/image1"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        android:text="@string/hello_world"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

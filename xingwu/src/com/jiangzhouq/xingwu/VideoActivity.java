@@ -76,15 +76,15 @@ public class VideoActivity extends Activity implements IPeerConnObserver{
 		// TODO Auto-generated method stub
 		if (Constants.LOG_SWITCH)
 			Log.d(Constants.LOG_TAG, "video RecvPeerConnAccept");
-		runOnUiThread(new Runnable()
-	    {
-	        public void run() 
-	        {
+//		runOnUiThread(new Runnable()
+//	    {
+//	        public void run() 
+//	        {
 //	        	if (eType == EPeerConnType.E_PEERCONN_VOICE_FDX)
 	        	if (eType == EPeerConnType.E_PEERCONN_VV_FDX)
 	        	{		
-	        		IceServer server = new IceServer("stun:120.236.21.179:19302");
-//	        		IceServer server = new IceServer("turn:120.236.21.179:3478", "3dinlife", "passwd");
+	        		IceServer server = new IceServer("stun:"+ Constants.TVB_LOGIN_SERVER_IP +":19302");
+//	        		IceServer server = new IceServer("turn:120.236.21.178:3478", "3dinlife", "passwd");
 	        		List<IceServer> servers = new LinkedList<IceServer>();
 	        		servers.add(server);
 	        		if (Constants.LOG_SWITCH)
@@ -96,8 +96,8 @@ public class VideoActivity extends Activity implements IPeerConnObserver{
 	        		if (Constants.LOG_SWITCH)
 						Log.d(Constants.LOG_TAG, "VV_Start");
 	        	}
-	        }
-	    });		
+//	        }
+//	    });		
 	}
 
 	@Override
@@ -138,14 +138,18 @@ public class VideoActivity extends Activity implements IPeerConnObserver{
 	        	if (eType == EPeerConnType.E_PEERCONN_VV_FDX)
 	        	{		
 	        		mPeerConn.SendPeerConnAccept(strFrom, EPeerConnType.E_PEERCONN_VV_FDX);
-	        		IceServer server = new IceServer("stun:120.236.21.179:19302");
-//	        		IceServer server = new IceServer("turn:120.236.21.179:3478", "3dinlife", "passwd");
+	        		IceServer server = new IceServer("stun:"+ Constants.TVB_LOGIN_SERVER_IP +":19302");
+//	        		IceServer server = new IceServer("turn:120.236.21.178:3478", "3dinlife", "passwd");
 	        		List<IceServer> servers = new LinkedList<IceServer>();
 	        		servers.add(server);
+	        		if (Constants.LOG_SWITCH)
+						Log.d(Constants.LOG_TAG, "server ready");
 //	        		mPeerConn.Start(EPeerConnType.E_PEERCONN_VOICE_FDX, strFrom, servers, false);
 	        		mPeerConn.Start(EPeerConnType.E_PEERCONN_VV_FDX, strFrom, servers,
 	        				new VideoRenderer(mVsv, VideoStreamsView.Endpoint.LOCAL), 
 	        				new VideoRenderer(mVsv, VideoStreamsView.Endpoint.REMOTE), false);
+	        		if (Constants.LOG_SWITCH)
+						Log.d(Constants.LOG_TAG, "VV_start");
 	        	}
 	        }
 	    });		
